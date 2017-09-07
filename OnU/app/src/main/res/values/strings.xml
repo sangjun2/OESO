@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">O E S O</string>
+    <string name="title_menu1">메뉴1</string>
+    <string name="title_menu2">메뉴2</string>
+    <string name="title_menu3">메뉴3</string>
+    <string name="title_menu4">메뉴4</string>
+
+    <string name="title">O E S O</string>
+    <string name="login_text">로그인을 해주세요</string>
+
+    <string name="form_id">이메일</string>
+    <string name="form_password">비밀번호</string>
+    <string name="form_login">로그인</string>
+    <string name="form_signup">회원가입</string>
+
+    <string name="type_consumer">일반인</string>
+    <string name="type_provider">임대인</string>
+
+    <string name="placeholder_email">이메일</string>
+    <string name="placeholder_password">비밀번호</string>
+    <string name="placeholder_retry_password">비밀번호 재확인</string>
+    <string name="placeholder_name">이름</string>
+    <string name="placeholder_phone">전화번호</string>
+    <string name="placeholder_city">시</string>
+    <string name="placeholder_district">구</string>
+
+    <string name="form_submit">확인</string>
+
+
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

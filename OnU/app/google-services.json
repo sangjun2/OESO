@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "799401536592",
+    "firebase_url": "https://andu-3f6db.firebaseio.com",
+    "project_id": "andu-3f6db",
+    "storage_bucket": "andu-3f6db.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:799401536592:android:a6e0d4f728bd450d",
+        "android_client_info": {
+          "package_name": "com.foxyawn.onu"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "799401536592-enmjebevp383t0vpfp5p1p70pmat1rji.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC5lwH98OqTlypRlbLRWwkHqg002dyRmic"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
