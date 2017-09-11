@@ -5,7 +5,7 @@
     <item android:drawable="@drawable/main_background"/>
     <item>
         <bitmap android:src="@drawable/cp_icon"
-            android:gravity="center"/>
+            android:gravity="top|center"/>
     </item>
     
 </layer-list>
