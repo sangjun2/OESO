@@ -74,6 +74,7 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/signup_email"
             android:background="@drawable/border_edittext"
             android:padding="12dp"
             android:textSize="16dp"
@@ -82,6 +83,7 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/signup_password"
             android:background="@drawable/border_edittext"
             android:padding="12dp"
             android:textSize="16dp"
@@ -91,6 +93,7 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/signup_retry_password"
             android:background="@color/white"
             android:padding="12dp"
             android:textSize="16dp"
@@ -115,6 +118,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/border_edittext"
             android:padding="12dp"
+            android:id="@+id/signup_name"
             android:textSize="16dp"
             android:inputType="text"
             android:hint="@string/placeholder_name"/>
@@ -123,6 +127,7 @@
             android:layout_height="wrap_content"
             android:background="@color/white"
             android:padding="12dp"
+            android:id="@+id/signup_phone"
             android:textSize="16dp"
             android:inputType="phone"
             android:hint="@string/placeholder_phone"/>
@@ -135,6 +140,7 @@
         android:background="@drawable/border"
         android:id="@+id/regionLayout"
         android:padding="2dp"
+        android:visibility="gone"
         android:layout_margin="16dp"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -144,6 +150,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_margin="12dp"
             android:id="@+id/form_city">
         </android.support.v7.widget.AppCompatSpinner>
 
@@ -151,6 +158,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_margin="12dp"
             android:id="@+id/form_district">
 
         </Spinner>
@@ -162,6 +170,7 @@
         android:layout_height="60dp"
         android:textSize="20dp"
         android:layout_margin="16dp"
+        android:id="@+id/form_submit"
         android:text="@string/form_submit"
         android:background="@drawable/type_button_click"
         app:layout_constraintRight_toRightOf="parent"

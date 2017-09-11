@@ -1,6 +1,7 @@
 package com.foxyawn.onu;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
@@ -76,8 +77,14 @@ public class RequireLoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            SharedPreferences preferences = getSharedPreferences("Account", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = preferences.edit();
+                            editor.putString("email", email.getText().toString());
+                            editor.commit();
+
                             Intent intent = new Intent(RequireLoginActivity.this, MainActivity.class);
                             startActivity(intent);
+                            finish();
                         } else {
 
                         }

@@ -51,9 +51,9 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         SharedPreferences preferences = getSharedPreferences("Account", MODE_PRIVATE);
-        String id = preferences.getString("id", null);
+        String email = preferences.getString("email", null);
 
-        if(id == null) {
+        if(email == null) {
             Intent intent = new Intent(MainActivity.this, RequireLoginActivity.class);
             startActivity(intent);
             finish();
