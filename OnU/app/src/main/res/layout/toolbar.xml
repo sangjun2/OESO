@@ -12,14 +12,13 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="회원가입"
+            android:id="@+id/toolbar_text"
             android:layout_weight="1"/>
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/toolbar_cancel"
-            android:text="취소"
+            android:id="@+id/toolbar_button"
             android:background="@android:color/transparent"
             android:layout_weight="4"/>
     </LinearLayout>
