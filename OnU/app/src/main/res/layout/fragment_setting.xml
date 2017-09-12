@@ -2,12 +2,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.foxyawn.onu.MainFragment">
+    tools:context="com.foxyawn.onu.SettingFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="fragment1" />
+        android:text="fragment4" />
 
 </FrameLayout>

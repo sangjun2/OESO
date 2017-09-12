@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">O E S O</string>
-    <string name="title_menu1">메뉴1</string>
-    <string name="title_menu2">메뉴2</string>
-    <string name="title_menu3">메뉴3</string>
-    <string name="title_menu4">메뉴4</string>
+    <string name="title_menu1">홈</string>
+    <string name="title_menu2">견적</string>
+    <string name="title_menu3">알림</string>
+    <string name="title_menu4">메뉴</string>
 
     <string name="title">O E S O</string>
     <string name="login_text">로그인을 해주세요</string>
@@ -25,7 +25,6 @@
     <string name="placeholder_district">구</string>
 
     <string name="form_submit">확인</string>
-
 
 
     <!-- TODO: Remove or change this placeholder text -->

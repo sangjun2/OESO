@@ -6,18 +6,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
-public class MainActivity extends AppCompatActivity implements MainFragment.OnFragmentInteractionListener, ApplyFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements MainFragment.OnFragmentInteractionListener, ApplyFragment.OnFragmentInteractionListener, NotificationFragment.OnFragmentInteractionListener, SettingFragment.OnFragmentInteractionListener {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
 
@@ -39,8 +35,12 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
                     fragmentTransaction.commit();
                     return true;
                 case R.id.navigation_menu3:
+                    fragmentTransaction.replace(R.id.content, new NotificationFragment());
+                    fragmentTransaction.commit();
                     return true;
                 case R.id.navigation_menu4:
+                    fragmentTransaction.replace(R.id.content, new SettingFragment());
+                    fragmentTransaction.commit();
                     return true;
             }
             return false;
@@ -50,6 +50,11 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.AppTheme);
+
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
         SharedPreferences preferences = getSharedPreferences("Account", MODE_PRIVATE);
         String email = preferences.getString("email", null);
 
@@ -58,14 +63,36 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
             startActivity(intent);
             finish();
         } else {
-            setTheme(R.style.AppTheme);
+            boolean requirePlace = preferences.getBoolean("place", false);
+            if(requirePlace) {
+                SharedPreferences tempPreferences = getSharedPreferences("temp", MODE_PRIVATE);
+                boolean temp = tempPreferences.getBoolean("place", false);
+                if(!temp) {
+                    Intent intent = new Intent(MainActivity.this, RegisterPlaceActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            }
         }
-
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.content, new MainFragment());
+        fragmentTransaction.commit();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        SharedPreferences tempPreferences = getSharedPreferences("temp", MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = tempPreferences.edit();
+        editor.putBoolean("place", false);
+        editor.commit();
     }
 
     @Override

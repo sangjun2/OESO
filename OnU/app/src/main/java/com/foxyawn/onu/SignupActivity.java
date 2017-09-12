@@ -1,15 +1,21 @@
 package com.foxyawn.onu;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.Toolbar;
 import android.util.JsonReader;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Adapter;
 import android.widget.AdapterView;
@@ -20,8 +26,14 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -35,9 +47,11 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class SignupActivity extends AppCompatActivity {
     ProgressBar progressBar;
@@ -50,18 +64,27 @@ public class SignupActivity extends AppCompatActivity {
     Spinner districtSpinner;
     ArrayAdapter<String> districtAdapter;
 
+    Context mContext;
+    LayoutInflater mLayoutInflater;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
+        mContext = this;
+        mLayoutInflater = getLayoutInflater();
 
         isProviderChecked = false;
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Button cancelButton = (Button) findViewById(R.id.toolbar_cancel);
-        cancelButton.setOnClickListener(new View.OnClickListener() {
+        TextView toolbarTitle = (TextView) findViewById(R.id.toolbar_text);
+        toolbarTitle.setText("회원가입");
+
+        Button toolbarButton = (Button) findViewById(R.id.toolbar_button);
+        toolbarButton.setText("취소");
+        toolbarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
@@ -181,12 +204,62 @@ public class SignupActivity extends AppCompatActivity {
                     String retryPw = passwordRetryText.getText().toString();
 
                     if(pw.equals(retryPw)) {
-                        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("users");
-                        if(isProviderChecked) { // provider
+                        FirebaseAuth mAuth;
 
-                        } else { // consumer
+                        final String email = emailText.getText().toString();
+                        mAuth = FirebaseAuth.getInstance();
+                        mAuth.createUserWithEmailAndPassword(email, pw).addOnCompleteListener(SignupActivity.this, new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if(task.isSuccessful()) {
+                                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                                    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("users");
+                                    String uid = user.getUid();
+                                    User newUser;
+                                    String userEmail = emailText.getText().toString();
+                                    String userPassword = passwordText.getText().toString();
+                                    String userTel = phoneText.getText().toString();
+                                    String userName = nameText.getText().toString();
 
-                        }
+                                    Map<String, String> userValues;
+                                    Map<String, Object> childUpdates = new HashMap<String, Object>();
+
+                                    if(isProviderChecked) { // provider
+                                        String userPlace = citySpinner.getSelectedItem().toString() + " " + districtSpinner.getSelectedItem().toString();
+
+                                        newUser = new User(userEmail, userPassword, userName, userTel, userPlace);
+                                        userValues = newUser.toMap();
+                                        childUpdates.put("/provider/" + uid, userValues);
+                                    } else { // consumer
+                                        newUser = new User(userEmail, userPassword, userName, userTel, null);
+                                        userValues = newUser.toMap();
+                                        childUpdates.put("/consumer/" + uid, userValues);
+                                    }
+                                    mDatabase.updateChildren(childUpdates);
+
+                                    SharedPreferences preferences = getSharedPreferences("Account", MODE_PRIVATE);
+                                    SharedPreferences.Editor editor = preferences.edit();
+                                    editor.putString("email", email);
+                                    if (isProviderChecked) {
+                                        editor.putBoolean("place", true);
+                                    }
+                                    editor.commit();
+
+                                    CustomDialog customDialog = new CustomDialog();
+                                    customDialog.getInstance(mContext, mLayoutInflater, R.layout.submit_dialog);
+                                    customDialog.show("회원가입이 완료되었습니다.", "확인");
+                                    customDialog.dialogButton1.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            Intent intent = new Intent(SignupActivity.this, MainActivity.class);
+                                            startActivity(intent);
+                                            finish();
+                                        }
+                                    });
+                                }
+                            }
+                        });
+
                     } else { // password incorrect
                         Toast.makeText(getApplicationContext(), "비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show();
                     }

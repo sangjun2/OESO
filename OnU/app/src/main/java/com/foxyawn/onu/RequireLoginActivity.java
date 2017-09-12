@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -72,26 +73,30 @@ public class RequireLoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress_bar);
                 progressBar.setVisibility(View.VISIBLE);
+                if(!email.getText().toString().equals("") && !password.getText().toString().equals("")) {
+                    mAuth.signInWithEmailAndPassword(email.getText().toString(), password.getText().toString()).addOnCompleteListener(RequireLoginActivity.this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                SharedPreferences preferences = getSharedPreferences("Account", MODE_PRIVATE);
+                                SharedPreferences.Editor editor = preferences.edit();
+                                editor.putString("email", email.getText().toString());
+                                editor.commit();
 
-                mAuth.signInWithEmailAndPassword(email.getText().toString(), password.getText().toString()).addOnCompleteListener(RequireLoginActivity.this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            SharedPreferences preferences = getSharedPreferences("Account", MODE_PRIVATE);
-                            SharedPreferences.Editor editor = preferences.edit();
-                            editor.putString("email", email.getText().toString());
-                            editor.commit();
+                                Intent intent = new Intent(RequireLoginActivity.this, MainActivity.class);
+                                startActivity(intent);
+                                finish();
+                            } else {
 
-                            Intent intent = new Intent(RequireLoginActivity.this, MainActivity.class);
-                            startActivity(intent);
-                            finish();
-                        } else {
+                            }
+                            progressBar.setVisibility(View.GONE);
 
                         }
-
-                        progressBar.setVisibility(View.GONE);
-                    }
-                });
+                    });
+                } else {
+                    Toast.makeText(getApplicationContext(), "정보를 입력해주세요.", Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.GONE);
+                }
             }
         });
 
