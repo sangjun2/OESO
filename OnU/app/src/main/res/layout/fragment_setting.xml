@@ -4,10 +4,10 @@
     android:layout_height="match_parent"
     tools:context="com.foxyawn.onu.SettingFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="fragment4" />
+        android:id="@+id/setting_list">
 
+    </ListView>
 </FrameLayout>

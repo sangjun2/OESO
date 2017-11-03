@@ -12,8 +12,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
-public class MainActivity extends AppCompatActivity implements MainFragment.OnFragmentInteractionListener, ApplyFragment.OnFragmentInteractionListener, NotificationFragment.OnFragmentInteractionListener, SettingFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements MainFragment.OnFragmentInteractionListener, ChattingFragment.OnFragmentInteractionListener, NotificationFragment.OnFragmentInteractionListener, SettingFragment.OnFragmentInteractionListener {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
 
@@ -31,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
                     fragmentTransaction.commit();
                     return true;
                 case R.id.navigation_menu2:
-                    fragmentTransaction.replace(R.id.content, new ApplyFragment());
+                    fragmentTransaction.replace(R.id.content, new ChattingFragment());
                     fragmentTransaction.commit();
                     return true;
                 case R.id.navigation_menu3:
@@ -71,6 +74,9 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnFr
                     Intent intent = new Intent(MainActivity.this, RegisterPlaceActivity.class);
                     startActivity(intent);
                     finish();
+                } else {
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("users");
                 }
             }
         }

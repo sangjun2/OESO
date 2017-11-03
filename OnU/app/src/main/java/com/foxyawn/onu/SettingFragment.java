@@ -1,12 +1,18 @@
 package com.foxyawn.onu;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+
+import java.util.ArrayList;
 
 
 /**
@@ -20,11 +26,12 @@ import android.view.ViewGroup;
 public class SettingFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final int MAX_ITEM_TYPE = 2;
+    private static final int PROFILE_ITEM_TYPE = 0;
+    private static final int LIST_ITEM_TYPE = 1;
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
+    private SharedPreferences mSharedPreferences;
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
@@ -45,8 +52,7 @@ public class SettingFragment extends Fragment {
     public static SettingFragment newInstance(String param1, String param2) {
         SettingFragment fragment = new SettingFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -55,8 +61,7 @@ public class SettingFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+
         }
     }
 
@@ -64,7 +69,16 @@ public class SettingFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_setting, container, false);
+        View view = inflater.inflate(R.layout.fragment_setting, container, false);
+        ListView listView = (ListView) view.findViewById(R.id.setting_list);
+
+        SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences("Account", Context.MODE_PRIVATE);
+        String[] settingList = getResources().getStringArray(R.array.setting);
+        SettingListViewAdapter adapter = new SettingListViewAdapter(sharedPreferences, settingList);
+
+        listView.setAdapter(adapter);
+
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

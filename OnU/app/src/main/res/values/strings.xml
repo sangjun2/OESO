@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">O E S O</string>
     <string name="title_menu1">홈</string>
-    <string name="title_menu2">견적</string>
+    <string name="title_menu2">채팅</string>
     <string name="title_menu3">알림</string>
     <string name="title_menu4">메뉴</string>
 
