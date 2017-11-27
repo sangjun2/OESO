@@ -8,12 +8,8 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -21,7 +17,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 
-public class MainActivity extends AppCompatActivity implements ChattingFragment.OnFragmentInteractionListener, NotificationFragment.OnFragmentInteractionListener, SettingFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements MainFragment_pro.OnFragmentInteractionListener,ChattingFragment.OnFragmentInteractionListener, NotificationFragment.OnFragmentInteractionListener, SettingFragment.OnFragmentInteractionListener {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
 
@@ -35,7 +31,8 @@ public class MainActivity extends AppCompatActivity implements ChattingFragment.
 
             switch (item.getItemId()) {
                 case R.id.navigation_menu1:
-                    fragmentTransaction.replace(R.id.content, new MainFragment());
+//                    fragmentTransaction.replace(R.id.content, new MainFragment());
+                    fragmentTransaction.replace(R.id.content, new MainFragment_pro());
                     fragmentTransaction.commit();
                     return true;
                 case R.id.navigation_menu2:
@@ -92,7 +89,8 @@ public class MainActivity extends AppCompatActivity implements ChattingFragment.
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.content, new MainFragment());
+//        fragmentTransaction.replace(R.id.content, new MainFragment());
+        fragmentTransaction.replace(R.id.content, new MainFragment_pro());
         fragmentTransaction.commit();
 
     }
