@@ -1,108 +1,200 @@
 package com.foxyawn.onu;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseExpandableListAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ExpandableListView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.ArrayList;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link MainFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link MainFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class MainFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    private OnFragmentInteractionListener mListener;
+    public Context mContext;
+    Estimation estimation;
 
     public MainFragment() {
         // Required empty public constructor
+         estimation = new Estimation();
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment MainFragment.
-     */
+
     // TODO: Rename and change types and number of parameters
-    public static MainFragment newInstance(String param1, String param2) {
+    public static MainFragment newInstance() {
         MainFragment fragment = new MainFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
+        mContext = getContext();
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_main, container, false);
+        View view = inflater.inflate(R.layout.fragment_main, container, false);
+
+        ExpandableListView listView = (ExpandableListView) view.findViewById(R.id.expanded_menu);
+        Button applyButton = (Button) view.findViewById(R.id.apply_button);
+        applyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(mContext, "공간유형 : "+estimation.getPlacetype()+"\n"+"구 : "+estimation.getDistrict()+"\n"+"인원 : "+estimation.getNumber()+"\n"+"날짜 : "+estimation.getDate()+"\n", Toast.LENGTH_LONG).show();
+            }
+        });
+        ArrayList<Item> groupList = new ArrayList<>();
+        ArrayList<String> typeList = new ArrayList<>();
+        typeList.add("공연장");
+        typeList.add("숙소");
+        typeList.add("스터디룸");
+        typeList.add("연습실");
+        typeList.add("카페");
+        typeList.add("파티룸");
+        typeList.add("회의실");
+        groupList.add(new Item("공간유형", typeList));
+
+        ArrayList<String> districtList = new ArrayList<>();
+        districtList.add("동구");
+        districtList.add("중구");
+        districtList.add("서구");
+        districtList.add("유성구");
+        districtList.add("대덕구");
+        groupList.add(new Item("구", districtList));
+
+        groupList.add(new Item("인원", null));
+        groupList.add(new Item("날짜", null));
+
+        ExpandableListViewAdapter adapter = new ExpandableListViewAdapter(groupList);
+        listView.setAdapter(adapter);
+
+        return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+    public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
+        public ArrayList<Item> list;
+
+        public ExpandableListViewAdapter(ArrayList<Item> list) {
+            this.list = list;
         }
-    }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+        @Override
+        public int getGroupCount() {
+            return list.size();
         }
-    }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
+        @Override
+        public boolean hasStableIds() {
+            return false;
+        }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        @Override
+        public int getChildrenCount(int groupPosition) {
+            return list.get(groupPosition).getChildList().size() == 0 ? 1 : list.get(groupPosition).getChildList().size();
+        }
+
+        @Override
+        public Object getGroup(int groupPosition) {
+            return list.get(groupPosition).getTitle();
+        }
+
+        @Override
+        public Object getChild(int groupPosition, int childPosition) {
+            return list.get(groupPosition).getChildList().get(childPosition).toString();
+        }
+
+        @Override
+        public long getGroupId(int groupPosition) {
+            return 0;
+        }
+
+        @Override
+        public long getChildId(int groupPosition, int childPosition) {
+            return 0;
+        }
+
+        @Override
+        public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
+            View view = LayoutInflater.from(mContext).inflate(R.layout.group_item, null);
+
+            TextView title = (TextView) view.findViewById(R.id.group_title);
+            title.setText(list.get(groupPosition).getTitle());
+
+            return view;
+        }
+
+        @Override
+        public View getChildView(final int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+            View view = null;
+
+            if(groupPosition == 0 || groupPosition == 1) { //공간유형 , 구
+                view = LayoutInflater.from(mContext).inflate(R.layout.normal_child_item, null);
+                final Button button = (Button) view.findViewById(R.id.normal_child_item);
+
+                button.setText(list.get(groupPosition).getChildList().get(childPosition));
+                button.setOnClickListener(new View.OnClickListener() {
+                    @SuppressLint("ResourceAsColor")
+                    @Override
+                    public void onClick(View v) {
+                        if (groupPosition == 0){
+                            estimation.setPlacetype(button.getText().toString());
+                            button.setBackgroundColor(R.color.selected);
+//                            Log.d("first",estimation.getPlacetype());
+                        }
+                        else{
+                            estimation.setDistrict(button.getText().toString());
+                            button.setBackgroundColor(R.color.selected);
+//                            Log.d("second",estimation.getDistrict());
+                        }
+                    }
+                });
+
+            } else if(groupPosition == 2) { // 인원
+                view = LayoutInflater.from(mContext).inflate(R.layout.number_child_item, null);
+                final EditText editText = (EditText) view.findViewById(R.id.number_child_item);
+                editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+
+                final Button button = (Button) view.findViewById(R.id.number_child_bt);
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        estimation.setNumber(editText.getText().toString());
+//                        Log.d("third",estimation.getNumber());
+                    }
+                });
+            } else if(groupPosition == 3) { // 날짜
+                view = LayoutInflater.from(mContext).inflate(R.layout.number_child_item, null);
+                final EditText editText = (EditText) view.findViewById(R.id.number_child_item);
+                editText.setInputType(InputType.TYPE_CLASS_DATETIME);
+
+                final Button button = (Button) view.findViewById(R.id.number_child_bt);
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        estimation.setDate(editText.getText().toString());
+//                        Log.d("fourth",estimation.getDate());
+                    }
+                });
+            }
+            return view;
+        }
+
+        @Override
+        public boolean isChildSelectable(int groupPosition, int childPosition) {
+            return true;
+        }
     }
 }

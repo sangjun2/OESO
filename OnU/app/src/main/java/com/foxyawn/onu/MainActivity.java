@@ -16,7 +16,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class MainActivity extends AppCompatActivity implements MainFragment.OnFragmentInteractionListener, ChattingFragment.OnFragmentInteractionListener, NotificationFragment.OnFragmentInteractionListener, SettingFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements ChattingFragment.OnFragmentInteractionListener, NotificationFragment.OnFragmentInteractionListener, SettingFragment.OnFragmentInteractionListener {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
 
