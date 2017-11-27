@@ -4,9 +4,14 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.ListFragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 
 
 /**
@@ -22,15 +27,15 @@ public class MainFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
+    static final String[] List_MENU = {"hihi","byby","gogo"};
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
     private OnFragmentInteractionListener mListener;
 
     public MainFragment() {
         // Required empty public constructor
+
     }
 
     /**
@@ -51,6 +56,7 @@ public class MainFragment extends Fragment {
         return fragment;
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,13 +64,31 @@ public class MainFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_main, container, false);
+
+        View view = inflater.inflate(R.layout.fragment_main,null);
+
+        ListView listView;
+        ListViewAdapter adapter;
+
+        adapter = new ListViewAdapter();
+        listView = (ListView)view.findViewById(R.id.listView);
+        listView.setAdapter(adapter);
+
+
+        for(int i=0 ;i<1;i++) { // DB에서 뽑아와서 사용 버튼에 i넣을까 생각중
+            adapter.addItem("회의실", "대전광역시 유성구", "3명", "2017-09-24");
+            adapter.addItem("공연장", "서울특별시 강남구", "33명", "2017-08-23");
+            adapter.addItem("화장실", "부산광역시 서구", "2명", "2017-06-22");
+        }
+
+        return view;
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -72,6 +96,7 @@ public class MainFragment extends Fragment {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
+
     }
 
     @Override

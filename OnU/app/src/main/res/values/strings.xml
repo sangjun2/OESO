@@ -1,11 +1,11 @@
 <resources>
-    <string name="app_name">O E S O</string>
+    <string name="app_name">B O P L E</string>
     <string name="title_menu1">홈</string>
     <string name="title_menu2">견적</string>
     <string name="title_menu3">알림</string>
     <string name="title_menu4">메뉴</string>
 
-    <string name="title">O E S O</string>
+    <string name="title">B O P L E</string>
     <string name="login_text">로그인을 해주세요</string>
 
     <string name="form_id">이메일</string>
