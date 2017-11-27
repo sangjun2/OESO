@@ -8,13 +8,18 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
 
 public class MainActivity extends AppCompatActivity implements ChattingFragment.OnFragmentInteractionListener, NotificationFragment.OnFragmentInteractionListener, SettingFragment.OnFragmentInteractionListener {
     private FirebaseAuth mAuth;
@@ -58,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements ChattingFragment.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         SharedPreferences preferences = getSharedPreferences("Account", MODE_PRIVATE);
         String email = preferences.getString("email", null);
 
@@ -88,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements ChattingFragment.
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.content, new MainFragment());
         fragmentTransaction.commit();
+
     }
 
     @Override
@@ -98,6 +105,7 @@ public class MainActivity extends AppCompatActivity implements ChattingFragment.
 
         SharedPreferences.Editor editor = tempPreferences.edit();
         editor.putBoolean("place", false);
+
         editor.commit();
     }
 
