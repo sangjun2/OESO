@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="city">
-        <item >서울</item>
-        <item >경기</item>
-        <item >부천</item>
-        <item >수원</item>
-        <item >파주</item>
-        <item >부산</item>
-        <item >대전</item>
+    <string-array name="setting">
+        <item >이용 내역</item>
+        <item >개인정보 변경</item>
+        <item >로그아웃</item>
     </string-array>
 </resources>

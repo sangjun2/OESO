@@ -10,6 +10,7 @@ import android.support.transition.Transition;
 import android.support.transition.TransitionManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -23,6 +24,14 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.Iterator;
 
 public class RequireLoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -78,16 +87,49 @@ public class RequireLoginActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-                                SharedPreferences preferences = getSharedPreferences("Account", MODE_PRIVATE);
-                                SharedPreferences.Editor editor = preferences.edit();
-                                editor.putString("email", email.getText().toString());
-                                editor.commit();
+                                final String uid = mAuth.getCurrentUser().getUid();
+                                DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("users");
+                                ValueEventListener valueEventListener = new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
 
-                                Intent intent = new Intent(RequireLoginActivity.this, MainActivity.class);
-                                startActivity(intent);
-                                finish();
+                                        if(dataSnapshot.getValue() == null) {
+
+                                        } else {
+                                            User userData = null;
+
+                                            for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                                userData = snapshot.getValue(User.class);
+                                            }
+
+
+                                            SharedPreferences preferences = getSharedPreferences("Account", MODE_PRIVATE);
+                                            SharedPreferences.Editor editor = preferences.edit();
+                                            editor.putString("email", userData.email);
+                                            editor.putString("name", userData.name);
+                                            editor.putString("tel", userData.tel);
+                                            editor.commit();
+
+                                            Intent intent = new Intent(RequireLoginActivity.this, MainActivity.class);
+                                            startActivity(intent);
+                                            finish();
+
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+
+                                    }
+                                };
+                                Query consumerQuery = mDatabase.child("consumer").orderByKey().equalTo(uid);
+                                Query providerQuery = mDatabase.child("provider").orderByKey().equalTo(uid);
+
+                                consumerQuery.addListenerForSingleValueEvent(valueEventListener);
+                                providerQuery.addListenerForSingleValueEvent(valueEventListener);
+
                             } else {
-
+                                Toast.makeText(getApplicationContext(), "로그인 정보가 틀립니다.", Toast.LENGTH_SHORT).show();
                             }
                             progressBar.setVisibility(View.GONE);
 

@@ -1,5 +1,8 @@
 package com.foxyawn.onu;
 
+import com.google.firebase.database.IgnoreExtraProperties;
+
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -7,12 +10,17 @@ import java.util.Map;
  * Created by Sangjun on 2017-09-12.
  */
 
+@IgnoreExtraProperties
 public class User {
-    private String email;
-    private String password;
-    private String name;
-    private String tel;
-    private String place;
+    public String email;
+    public String password;
+    public String name;
+    public String tel;
+    public String place;
+
+    public User() {
+
+    }
 
     public User(String email, String password, String name, String tel, String place) {
         this.email = email;
