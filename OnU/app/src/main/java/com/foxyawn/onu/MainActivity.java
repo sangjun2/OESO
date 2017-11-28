@@ -31,8 +31,8 @@ public class MainActivity extends AppCompatActivity implements MainFragment_pro.
 
             switch (item.getItemId()) {
                 case R.id.navigation_menu1:
-//                    fragmentTransaction.replace(R.id.content, new MainFragment());
-                    fragmentTransaction.replace(R.id.content, new MainFragment_pro());
+                    fragmentTransaction.replace(R.id.content, new MainFragment());
+//                    fragmentTransaction.replace(R.id.content, new MainFragment_pro());
                     fragmentTransaction.commit();
                     return true;
                 case R.id.navigation_menu2:
@@ -89,8 +89,8 @@ public class MainActivity extends AppCompatActivity implements MainFragment_pro.
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//        fragmentTransaction.replace(R.id.content, new MainFragment());
-        fragmentTransaction.replace(R.id.content, new MainFragment_pro());
+        fragmentTransaction.replace(R.id.content, new MainFragment());
+//        fragmentTransaction.replace(R.id.content, new MainFragment_pro());
         fragmentTransaction.commit();
 
     }
