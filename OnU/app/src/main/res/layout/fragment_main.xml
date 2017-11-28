@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bin"
     tools:context="com.foxyawn.onu.MainFragment"
     android:orientation="vertical">
     <!-- TODO: Update blank fragment layout -->
@@ -10,6 +11,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:background="#523738"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:text="신 청 서"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            android:textSize="24dp"/>
         <ExpandableListView
             android:id="@+id/expanded_menu"
             android:layout_width="0dp"
@@ -18,7 +31,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toBottomOf="@id/title">
 
         </ExpandableListView>
 
@@ -26,7 +39,10 @@
             android:id="@+id/apply_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="신청하기"
+            android:text="신 청 하 기"
+            android:textColor="@color/white"
+            android:textSize="20dp"
+            android:background="#575757"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
