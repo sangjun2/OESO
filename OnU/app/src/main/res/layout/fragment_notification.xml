@@ -2,13 +2,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.foxyawn.onu.NotificationFragment">
+    tools:context="com.foxyawn.onu.NotificationFragment"
+    android:background="@drawable/background">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="fragment3" />
+
     <GridView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

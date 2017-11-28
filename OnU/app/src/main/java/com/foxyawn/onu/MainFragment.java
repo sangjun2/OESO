@@ -66,7 +66,9 @@ public class MainFragment extends Fragment {
         typeList.add("카페");
         typeList.add("파티룸");
         typeList.add("회의실");
-        groupList.add(new Item("공간유형", typeList));
+        Item item = new Item("공간유형", typeList);
+
+        groupList.add(item);
 
         ArrayList<String> districtList = new ArrayList<>();
         districtList.add("동구");
