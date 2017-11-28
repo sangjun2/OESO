@@ -8,12 +8,14 @@ public class Estimation {
 
     String placetype;
     String district;
+    String place;
     String number;
     String date;
 
     Estimation (){
         this.placetype = "";
         this.district = "";
+        this.place = "";
         this.number = "";
         this.date = "";
     }
@@ -23,6 +25,9 @@ public class Estimation {
     }
     public void setDistrict(String district) {
         this.district = district;
+    }
+    public void setPlace(String place) {
+        this.place = place;
     }
     public void setNumber(String number) {
         this.number = number;
@@ -36,6 +41,9 @@ public class Estimation {
     }
     public String getDistrict( ) {
         return district;
+    }
+    public String getPlace() {
+        return place;
     }
     public String getNumber( ) {
         return number;
