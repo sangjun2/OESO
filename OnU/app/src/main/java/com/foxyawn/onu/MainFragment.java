@@ -54,7 +54,7 @@ public class MainFragment extends Fragment {
         applyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext, "공간유형 : "+estimation.getPlacetype()+"\n"+"구 : "+estimation.getDistrict()+"\n"+"인원 : "+estimation.getNumber()+"\n"+"날짜 : "+estimation.getDate()+"\n", Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, "공간유형 : "+estimation.getPlacetype()+"\n"+"구 : "+estimation.getDistrict()+"\n"+"인원 : "+estimation.getNumber()+"\n"+"날짜 : "+estimation.getDate(), Toast.LENGTH_LONG).show();
             }
         });
         ArrayList<Item> groupList = new ArrayList<>();
