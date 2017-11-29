@@ -6,9 +6,6 @@
     android:background="@drawable/background">
 
     <!-- TODO: Update blank fragment layout -->
-<<<<<<< HEAD
-
-=======
     <TextView
         android:id="@+id/textview"
         android:layout_width="match_parent"
@@ -17,9 +14,7 @@
         android:textColor="@color/white"
         android:background="#523738"
         android:textSize="24dp"
-        android:text="신청 리스트"
-        />
->>>>>>> 1f752dc1a90ac08bae40d500aa17ad454671ecda
+        android:text="신청 리스트"/>
     <GridView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
