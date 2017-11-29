@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bin"
     tools:context="com.foxyawn.onu.ChattingFragment_pro"
     android:orientation="vertical">
 
@@ -13,9 +14,11 @@
         <TextView
             android:id="@+id/title"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="70dp"
             android:text="매물 정보"
-            android:textSize="30dp"
+            android:textColor="@color/white"
+            android:background="#523738"
+            android:textSize="24dp"
             android:gravity="center"/>
         <ImageView
             app:layout_constraintTop_toBottomOf="@+id/title"
@@ -53,6 +56,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="등록/수정하기"
+            android:textColor="@color/white"
+            android:textSize="20dp"
+            android:background="#575757"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
