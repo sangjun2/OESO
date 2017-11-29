@@ -2,7 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.foxyawn.onu.NotificationFragment">
+    tools:context="com.foxyawn.onu.NotificationFragment"
+    android:background="@drawable/background">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
@@ -13,8 +14,7 @@
         android:textColor="@color/white"
         android:background="#523738"
         android:textSize="24dp"
-        android:text="신청 리스트"
-        />
+        android:text="신청 리스트"/>
     <GridView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

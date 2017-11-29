@@ -54,20 +54,6 @@ public class NotificationFragment extends Fragment {
             return view;
         }
     }
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu){
-//        getMenuInflater().inflate(R.menu.menu_main, menu);
-//        return true;
-//    }
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item){
-//        switch (item.getItemId()){
-//            case R.id.insert:
-//                Intent intent = new Intent(MainActivity.this, InsertItem.class);
-//                startActivityForResult(intent, 1);
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
