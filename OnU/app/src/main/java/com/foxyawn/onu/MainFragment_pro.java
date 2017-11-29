@@ -79,8 +79,8 @@ public class MainFragment_pro extends Fragment {
 
         for(int i=0 ;i<1;i++) { // DB에서 뽑아와서 사용 버튼에 i넣을까 생각중
             adapter.addItem("회의실", "대전광역시 유성구", "3명", "2017-09-24");
-            adapter.addItem("공연장", "서울특별시 강남구", "33명", "2017-08-23");
-            adapter.addItem("화장실", "부산광역시 서구", "2명", "2017-06-22");
+            adapter.addItem("공연장", "서울특별시 강남구", "8명", "2017-08-23");
+            adapter.addItem("화장실", "부산광역시 부산구", "2명", "2017-06-22");
         }
 
         return view;
