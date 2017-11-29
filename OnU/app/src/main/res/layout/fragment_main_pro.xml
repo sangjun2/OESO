@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bin"
     tools:context="com.foxyawn.onu.MainFragment_pro">
 
     <!-- TODO: Update blank fragment layout -->
@@ -13,44 +14,46 @@
         <TextView
             android:id="@+id/textview"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="70dp"
             android:gravity="center"
-            android:textSize="50dp"
+            android:textColor="@color/white"
+            android:background="#523738"
+            android:textSize="24dp"
             android:text="주변 견적 리스트"
-            android:layout_marginTop="30dp"
-            android:layout_marginBottom="40dp"/>
+            />
         <LinearLayout
             android:orientation="horizontal"
+            android:background="@color/selected"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="25dp">
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="25dp"
                 android:text="유형"
                 android:gravity="center"
                 android:layout_weight="2"/>
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="25dp"
                 android:text="장소"
                 android:gravity="center"
                 android:layout_weight="3"/>
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="25dp"
                 android:text="인원"
                 android:gravity="center"
                 android:layout_weight="1"/>
             <TextView
                 android:gravity="center"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="25dp"
                 android:text="날짜"
                 android:layout_weight="2"/>
             <TextView
                 android:gravity="center"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="25dp"
                 android:text="신청"
                 android:layout_weight="3"/>
 
