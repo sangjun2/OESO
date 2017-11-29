@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.foxyawn.onu.ChattingFragment"
+    android:background="@drawable/parchment"
     android:orientation="vertical">
 
     <LinearLayout
@@ -11,5 +12,45 @@
         android:orientation="vertical"
         android:layout_height="match_parent">
 
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="50dp"
+            android:layout_marginTop="90dp"
+            android:text="나의 신청 내역"
+            android:layout_gravity="center"/>
+
+        <TextView
+            android:layout_marginTop="40dp"
+            android:layout_marginLeft="35dp"
+            android:textSize="25dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="공간유형 : 숙소"/>
+
+        <TextView
+            android:layout_marginTop="40dp"
+            android:layout_marginLeft="35dp"
+            android:textSize="25dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="지        역 : 유성구"/>
+
+        <TextView
+            android:layout_marginTop="40dp"
+            android:layout_marginLeft="35dp"
+            android:textSize="25dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="인        원 : 4 명"/>
+
+        <TextView
+            android:layout_marginTop="40dp"
+            android:textSize="25dp"
+            android:layout_marginLeft="35dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="날        짜 : 2017-11-29"/>
     </LinearLayout>
 </FrameLayout>

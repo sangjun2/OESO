@@ -36,8 +36,8 @@ public class MainActivity extends AppCompatActivity implements MainFragment_pro.
                     fragmentTransaction.commit();
                     return true;
                 case R.id.navigation_menu2:
-//                    fragmentTransaction.replace(R.id.content, new ChattingFragment());
-                    fragmentTransaction.replace(R.id.content, new ChattingFragment_pro());
+                    fragmentTransaction.replace(R.id.content, new ChattingFragment());
+//                    fragmentTransaction.replace(R.id.content, new ChattingFragment_pro());
                     fragmentTransaction.commit();
                     return true;
                 case R.id.navigation_menu3:

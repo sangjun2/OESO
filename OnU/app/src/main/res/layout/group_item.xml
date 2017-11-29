@@ -6,9 +6,11 @@
     android:layout_height="wrap_content">
 
     <LinearLayout
+
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/selected"
+
+        android:background="@color/white"
         android:padding="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -20,9 +22,7 @@
             android:layout_height="wrap_content"
             android:text=""
             android:textAlignment="center"
-            android:textSize="20dp"
-            android:textColor="#ffffff"
-            />
+            android:textSize="20dp" />
 
     </LinearLayout>
 
