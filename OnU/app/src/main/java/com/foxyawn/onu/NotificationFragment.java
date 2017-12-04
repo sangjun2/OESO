@@ -138,10 +138,10 @@ public class NotificationFragment extends Fragment {
         gridView = (GridView) view.findViewById(R.id.gridView);
 
         adapter = new SingerAdapter();
-        adapter.addIem(new SingerItem("공연장","동구","3","상세주소1",R.drawable.aoa));
-        adapter.addIem(new SingerItem("숙소","중구","7","상세주소2",R.drawable.aoa));
-        adapter.addIem(new SingerItem("스터디룸","서구","5","상세주소3",R.drawable.aoa));
-        adapter.addIem(new SingerItem("연습실","유성구","3","상세주소4",R.drawable.aoa));
+        adapter.addIem(new SingerItem("공연장","동구","3","상세주소1",R.drawable.hall2));
+        adapter.addIem(new SingerItem("숙소","중구","7","상세주소2",R.drawable.home));
+        adapter.addIem(new SingerItem("스터디룸","서구","5","상세주소3",R.drawable.study));
+        adapter.addIem(new SingerItem("연습실","유성구","3","상세주소4",R.drawable.practice));
 
         gridView.setAdapter(adapter);
 
@@ -149,7 +149,8 @@ public class NotificationFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 SingerItem item = (SingerItem) adapter.getItem(position);
-                Toast.makeText(mContext,"선택된 제품 : "+item.getMobile()+"\n가격 : "+item.getPrice(),Toast.LENGTH_LONG).show();
+//                Toast.makeText(mContext,"선택된 제품 : "+item.getMobile()+"\n가격 : "+item.getPrice(),Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, "선택된 제품 : 숙소\n장소 : 중구\n최대수용 인원 : 7\n상세주소 : 중구 --동 -----",Toast.LENGTH_LONG).show();
             }
         });
 
