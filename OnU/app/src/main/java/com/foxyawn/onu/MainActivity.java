@@ -9,6 +9,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,6 +23,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment_pro.
     private FirebaseAuth.AuthStateListener mAuthListener;
     private DatabaseReference mDatabase;
     FirebaseUser user;
+    String type;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -31,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment_pro.
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-            if (mDatabase.child("user").child("consumer").equalTo(user.getUid()) == null) {
+            if (type.equals("consumer")) {
                 switch (item.getItemId()) {
                     case R.id.navigation_menu1:
                         fragmentTransaction.replace(R.id.content, new MainFragment());
@@ -50,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment_pro.
                         fragmentTransaction.commit();
                         return true;
                 }
-            }else{
+            }else if(type.equals("provider")){
             switch (item.getItemId()) {
                 case R.id.navigation_menu1:
                     fragmentTransaction.replace(R.id.content, new MainFragment_pro());
@@ -91,43 +93,24 @@ public class MainActivity extends AppCompatActivity implements MainFragment_pro.
             Intent intent = new Intent(MainActivity.this, RequireLoginActivity.class);
             startActivity(intent);
             finish();
-        } else {
-            boolean requirePlace = preferences.getBoolean("place", false);
-            if(requirePlace) {
-                SharedPreferences tempPreferences = getSharedPreferences("temp", MODE_PRIVATE);
-                boolean temp = tempPreferences.getBoolean("place", false);
-                if(!temp) {
-                    Intent intent = new Intent(MainActivity.this, RegisterPlaceActivity.class);
-                    startActivity(intent);
-                    finish();
-                } else {
-                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("users");
-                }
-            }
         }
 
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        type = preferences.getString("type", "");
+        Log.d("type==", type);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.content, new MainFragment());
-//        fragmentTransaction.replace(R.id.content, new MainFragment_pro());
+
+        if(type.equals("consumer")) {
+            fragmentTransaction.replace(R.id.content, new MainFragment());
+        } else {
+            fragmentTransaction.replace(R.id.content, new MainFragment_pro());
+        }
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
         fragmentTransaction.commit();
 
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        SharedPreferences tempPreferences = getSharedPreferences("temp", MODE_PRIVATE);
-
-        SharedPreferences.Editor editor = tempPreferences.edit();
-        editor.putBoolean("place", false);
-
-        editor.commit();
     }
 
     @Override
