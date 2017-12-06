@@ -20,6 +20,8 @@ import com.google.firebase.database.FirebaseDatabase;
 public class MainActivity extends AppCompatActivity implements MainFragment_pro.OnFragmentInteractionListener,ChattingFragment.OnFragmentInteractionListener, NotificationFragment.OnFragmentInteractionListener, SettingFragment.OnFragmentInteractionListener {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
+    private DatabaseReference mDatabase;
+    FirebaseUser user;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -29,14 +31,32 @@ public class MainActivity extends AppCompatActivity implements MainFragment_pro.
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
+            if (mDatabase.child("user").child("consumer").equalTo(user.getUid()) == null) {
+                switch (item.getItemId()) {
+                    case R.id.navigation_menu1:
+                        fragmentTransaction.replace(R.id.content, new MainFragment());
+                        fragmentTransaction.commit();
+                        return true;
+                    case R.id.navigation_menu2:
+                        fragmentTransaction.replace(R.id.content, new ChattingFragment());
+                        fragmentTransaction.commit();
+                        return true;
+                    case R.id.navigation_menu3:
+                        fragmentTransaction.replace(R.id.content, new NotificationFragment());
+                        fragmentTransaction.commit();
+                        return true;
+                    case R.id.navigation_menu4:
+                        fragmentTransaction.replace(R.id.content, new SettingFragment());
+                        fragmentTransaction.commit();
+                        return true;
+                }
+            }else{
             switch (item.getItemId()) {
                 case R.id.navigation_menu1:
-//                    fragmentTransaction.replace(R.id.content, new MainFragment());
                     fragmentTransaction.replace(R.id.content, new MainFragment_pro());
                     fragmentTransaction.commit();
                     return true;
                 case R.id.navigation_menu2:
-//                    fragmentTransaction.replace(R.id.content, new ChattingFragment());
                     fragmentTransaction.replace(R.id.content, new ChattingFragment_pro());
                     fragmentTransaction.commit();
                     return true;
@@ -49,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment_pro.
                     fragmentTransaction.commit();
                     return true;
             }
+}
             return false;
         }
 
@@ -61,9 +82,10 @@ public class MainActivity extends AppCompatActivity implements MainFragment_pro.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         SharedPreferences preferences = getSharedPreferences("Account", MODE_PRIVATE);
         String email = preferences.getString("email", null);
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        user = FirebaseAuth.getInstance().getCurrentUser();
 
         if(email == null) {
             Intent intent = new Intent(MainActivity.this, RequireLoginActivity.class);
