@@ -10,7 +10,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+
 import android.support.annotation.NonNull;
+
 import android.support.v4.app.Fragment;
 import android.text.InputType;
 import android.util.Log;
@@ -33,6 +35,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -43,7 +46,7 @@ import static android.app.Activity.RESULT_OK;
 
 public class ChattingFragment_pro extends Fragment {
 
-//    private String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.CAMERA};
+
     private StorageReference mStorageRef;
     private static final int PICK_FROM_CAMERA = 0;
     private static final int PICK_FROM_ALBUM = 1;
@@ -69,71 +72,9 @@ public class ChattingFragment_pro extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         mContext = getContext();
-        mStorageRef = FirebaseStorage.getInstance().getReference();
-        uploadImage();
-        try {
-            downloadImage();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-//        checkPermissions();
-    }
 
-    private void downloadImage() throws IOException {
-        File localFile = File.createTempFile("images", "jpg");
-        mStorageRef.getFile(localFile)
-                .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                        // Successfully downloaded data to local file
-                        // ...
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle failed download
-                // ...
-            }
-        });
     }
-
-    private void uploadImage() {
-        Uri file = Uri.fromFile(new File("path/to/images/rivers.jpg"));
-        StorageReference riversRef = mStorageRef.child("images/rivers.jpg");
-
-        riversRef.putFile(file)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        // Get a URL to the uploaded content
-                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        // Handle unsuccessful uploads
-                        // ...
-                    }
-                });
-    }
-//    private boolean checkPermissions() {
-//        int result;
-//        List<String> permissionList = new ArrayList<>();
-//        for (String pm : permissions) {
-//            result = ContextCompat.checkSelfPermission(this, pm);
-//            if (result != PackageManager.PERMISSION_GRANTED) { //사용자가 해당 권한을 가지고 있지 않을 경우 리스트에 해당 권한명 추가
-//                permissionList.add(pm);
-//            }
-//        }
-//        if (!permissionList.isEmpty()) { //권한이 추가되었으면 해당 리스트가 empty가 아니므로 request 즉 권한을 요청합니다.
-//            ActivityCompat.requestPermissions(this, permissionList.toArray(new String[permissionList.size()]), MULTIPLE_PERMISSIONS);
-//            return false;
-//        }
-//        return true;
-//    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
@@ -172,9 +113,30 @@ public class ChattingFragment_pro extends Fragment {
                 if(extras != null)
                 {
                     Bitmap photo = extras.getParcelable("data");
+                    mStorageRef = FirebaseStorage.getInstance().getReference();
+                    StorageReference image = mStorageRef.child("image");
+
                     img.setImageBitmap(photo);
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    photo.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                    byte[] photodata = baos.toByteArray();
+                    UploadTask uploadTask = image.putBytes(photodata);
+                    uploadTask.addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getContext(),"실패",Toast.LENGTH_LONG).show();
+
+                        }
+                    }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            Toast.makeText(getContext(),"성공",Toast.LENGTH_LONG).show();
+
+                        }
+                    });
 
                     storeCropImage(photo,filePath);
+
                     break;
                 }
                 File f = new File(mlmageCaptureUri.getPath());
@@ -262,7 +224,7 @@ public class ChattingFragment_pro extends Fragment {
         applyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext, "공간유형 : "+estimation.getPlacetype()+"\n"+"구 : "+estimation.getDistrict()+"\n"+"상세주소 : "+estimation.getPlace()+"\n인원 : "+estimation.getNumber(), Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, "공간유형 : "+estimation.getPlacetype()+"\n"+"구 : "+estimation.getDistrict()+"\n"+"상세주소 : "+estimation.getPlace()+"\n인원 : "+estimation.getNumber()+"\n가격 : "+estimation.getPrice(), Toast.LENGTH_LONG).show();
             }
         });
         ArrayList<Item> groupList = new ArrayList<>();
@@ -285,6 +247,7 @@ public class ChattingFragment_pro extends Fragment {
         groupList.add(new Item("구", districtList));
         groupList.add(new Item("상세주소", null));
         groupList.add(new Item("최대수용인원", null));
+        groupList.add(new Item("가격",null));
         ExpandableListViewAdapter adapter = new ExpandableListViewAdapter(groupList);
         listView.setAdapter(adapter);
 
@@ -406,6 +369,19 @@ public class ChattingFragment_pro extends Fragment {
                     public void onClick(View v) {
                         estimation.setDate(editText.getText().toString());
 //                        Log.d("fourth",estimation.getDate());
+                    }
+                });
+            }else if(groupPosition == 5) { // 가격
+                view = LayoutInflater.from(mContext).inflate(R.layout.number_child_item, null);
+                final EditText editText = (EditText) view.findViewById(R.id.number_child_item);
+                editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+
+                final Button button = (Button) view.findViewById(R.id.number_child_bt);
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        estimation.setPrice(editText.getText().toString());
+//                        Log.d("five",estimation.getDate());
                     }
                 });
             }

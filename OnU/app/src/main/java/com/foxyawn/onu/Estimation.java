@@ -11,13 +11,19 @@ public class Estimation {
     String place;
     String number;
     String date;
+    String price;
 
     Estimation (){
+        this.price = "";
         this.placetype = "";
         this.district = "";
         this.place = "";
         this.number = "";
         this.date = "";
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
     }
 
     public void setPlacetype(String placetype) {
@@ -34,6 +40,10 @@ public class Estimation {
     }
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public String getPrice() {
+        return price;
     }
 
     public String getPlacetype( ) {
