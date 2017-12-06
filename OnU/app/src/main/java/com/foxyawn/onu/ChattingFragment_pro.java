@@ -5,12 +5,15 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -62,23 +65,8 @@ public class ChattingFragment_pro extends Fragment {
         super.onCreate(savedInstanceState);
 
         mContext = getContext();
-        checkPermissions();
     }
-    private boolean checkPermissions() {
-        int result;
-        List<String> permissionList = new ArrayList<>();
-        for (String pm : permissions) {
-            result = ContextCompat.checkSelfPermission(this, pm);
-            if (result != PackageManager.PERMISSION_GRANTED) { //사용자가 해당 권한을 가지고 있지 않을 경우 리스트에 해당 권한명 추가
-                permissionList.add(pm);
-            }
-        }
-        if (!permissionList.isEmpty()) { //권한이 추가되었으면 해당 리스트가 empty가 아니므로 request 즉 권한을 요청합니다.
-            ActivityCompat.requestPermissions(this, permissionList.toArray(new String[permissionList.size()]), MULTIPLE_PERMISSIONS);
-            return false;
-        }
-        return true;
-    }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
@@ -208,7 +196,7 @@ public class ChattingFragment_pro extends Fragment {
         applyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext, "공간유형 : "+estimation.getPlacetype()+"\n"+"구 : "+estimation.getDistrict()+"\n"+"상세주소 : "+estimation.getPlace()+"\n인원 : "+estimation.getNumber(), Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, "공간유형 : "+estimation.getPlacetype()+"\n"+"구 : "+estimation.getDistrict()+"\n"+"상세주소 : "+estimation.getPlace()+"\n인원 : "+estimation.getNumber()+"\n가격 : "+estimation.getPrice(), Toast.LENGTH_LONG).show();
             }
         });
         ArrayList<Item> groupList = new ArrayList<>();
@@ -231,6 +219,7 @@ public class ChattingFragment_pro extends Fragment {
         groupList.add(new Item("구", districtList));
         groupList.add(new Item("상세주소", null));
         groupList.add(new Item("최대수용인원", null));
+        groupList.add(new Item("가격",null));
         ExpandableListViewAdapter adapter = new ExpandableListViewAdapter(groupList);
         listView.setAdapter(adapter);
 
@@ -352,6 +341,19 @@ public class ChattingFragment_pro extends Fragment {
                     public void onClick(View v) {
                         estimation.setDate(editText.getText().toString());
 //                        Log.d("fourth",estimation.getDate());
+                    }
+                });
+            }else if(groupPosition == 5) { // 가격
+                view = LayoutInflater.from(mContext).inflate(R.layout.number_child_item, null);
+                final EditText editText = (EditText) view.findViewById(R.id.number_child_item);
+                editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+
+                final Button button = (Button) view.findViewById(R.id.number_child_bt);
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        estimation.setPrice(editText.getText().toString());
+//                        Log.d("five",estimation.getDate());
                     }
                 });
             }
