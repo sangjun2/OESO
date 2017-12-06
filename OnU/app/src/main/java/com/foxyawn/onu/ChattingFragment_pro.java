@@ -5,15 +5,15 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
+
+import android.support.annotation.NonNull;
+
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,19 +26,28 @@ import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import java.io.FileOutputStream;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 
 
 public class ChattingFragment_pro extends Fragment {
 
-//    private String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.CAMERA};
+
+    private StorageReference mStorageRef;
     private static final int PICK_FROM_CAMERA = 0;
     private static final int PICK_FROM_ALBUM = 1;
     private static final int CROP_FROM_IMAGE = 2;
@@ -63,10 +72,9 @@ public class ChattingFragment_pro extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         mContext = getContext();
-    }
 
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
@@ -105,9 +113,30 @@ public class ChattingFragment_pro extends Fragment {
                 if(extras != null)
                 {
                     Bitmap photo = extras.getParcelable("data");
+                    mStorageRef = FirebaseStorage.getInstance().getReference();
+                    StorageReference image = mStorageRef.child("image");
+
                     img.setImageBitmap(photo);
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    photo.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                    byte[] photodata = baos.toByteArray();
+                    UploadTask uploadTask = image.putBytes(photodata);
+                    uploadTask.addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getContext(),"실패",Toast.LENGTH_LONG).show();
+
+                        }
+                    }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            Toast.makeText(getContext(),"성공",Toast.LENGTH_LONG).show();
+
+                        }
+                    });
 
                     storeCropImage(photo,filePath);
+
                     break;
                 }
                 File f = new File(mlmageCaptureUri.getPath());
@@ -140,8 +169,7 @@ public class ChattingFragment_pro extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_chatting_pro, container, false);
         img = (ImageView) view.findViewById(R.id.imageView);

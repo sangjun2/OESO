@@ -15,6 +15,30 @@
       },
       "oauth_client": [
         {
+          "client_id": "799401536592-g2572b4u42c704oufrfctljqu68ffc8t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.foxyawn.onu",
+            "certificate_hash": "322cddcd9a45924762ac7835b9936f216dc670ec"
+          }
+        },
+        {
+          "client_id": "799401536592-4oonh3bi3fklnosqb6nm96tlfksklm7u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.foxyawn.onu",
+            "certificate_hash": "802295778c3b3758c8c497d93e669d60c7784908"
+          }
+        },
+        {
+          "client_id": "799401536592-3bp5vquo9ligkb7nl6bk9gk04b73j6l5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.foxyawn.onu",
+            "certificate_hash": "30e5742e75242d0efadbdc68425cc06ff7d8ef0a"
+          }
+        },
+        {
           "client_id": "799401536592-enmjebevp383t0vpfp5p1p70pmat1rji.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -22,6 +46,9 @@
       "api_key": [
         {
           "current_key": "AIzaSyC5lwH98OqTlypRlbLRWwkHqg002dyRmic"
+        },
+        {
+          "current_key": "AIzaSyDyhHM77DsNCqpPMn-gO81_m4bzmXpleaQ"
         }
       ],
       "services": {
@@ -29,8 +56,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "799401536592-enmjebevp383t0vpfp5p1p70pmat1rji.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2
