@@ -1,14 +1,13 @@
 package com.foxyawn.onu;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-
-import java.util.ArrayList;
 
 /**
  * Created by Sangjun on 2017-09-18.
@@ -59,6 +58,21 @@ public class SettingListViewAdapter extends BaseAdapter {
 
                 TextView settingText = (TextView) convertView.findViewById(R.id.setting_text);
                 settingText.setText(this.list[position - 1]);
+
+                if(this.list[position - 1].equals("로그아웃")) {
+                    convertView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            SharedPreferences preferences = context.getSharedPreferences("Account", context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = preferences.edit();
+                            editor.clear();
+                            editor.commit();
+
+                            Intent intent = new Intent(context, MainActivity.class);
+                            context.startActivity(intent);
+                        }
+                    });
+                }
             }
         }
 

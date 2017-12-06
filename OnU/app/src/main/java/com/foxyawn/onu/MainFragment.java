@@ -15,12 +15,19 @@ import android.widget.ExpandableListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
 
 
 public class MainFragment extends Fragment {
     public Context mContext;
     Estimation estimation;
+    DatabaseReference mDatabase;
+    FirebaseUser user;
 
     public MainFragment() {
         // Required empty public constructor
@@ -34,13 +41,10 @@ public class MainFragment extends Fragment {
         return fragment;
     }
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         mContext = getContext();
-
     }
 
     @Override
@@ -55,8 +59,17 @@ public class MainFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Toast.makeText(mContext, "공간유형 : "+estimation.getPlacetype()+"\n"+"구 : "+estimation.getDistrict()+"\n"+"인원 : "+estimation.getNumber()+"\n"+"날짜 : "+estimation.getDate(), Toast.LENGTH_LONG).show();
+                mDatabase = FirebaseDatabase.getInstance().getReference();
+                user = FirebaseAuth.getInstance().getCurrentUser();
+                Toast.makeText(mContext, user.getUid(), Toast.LENGTH_LONG).show();
+                mDatabase.child("contract").child(user.getUid()).child("date").setValue(estimation.getDate());
+                mDatabase.child("contract").child(user.getUid()).child("number").setValue(estimation.getNumber());
+                mDatabase.child("contract").child(user.getUid()).child("place").setValue(estimation.getDistrict());
+                mDatabase.child("contract").child(user.getUid()).child("type").setValue(estimation.getPlacetype());
             }
         });
+
+
         ArrayList<Item> groupList = new ArrayList<>();
         ArrayList<String> typeList = new ArrayList<>();
         typeList.add("공연장");
@@ -67,7 +80,6 @@ public class MainFragment extends Fragment {
         typeList.add("파티룸");
         typeList.add("회의실");
         Item item = new Item("공간유형", typeList);
-
         groupList.add(item);
 
         ArrayList<String> districtList = new ArrayList<>();
