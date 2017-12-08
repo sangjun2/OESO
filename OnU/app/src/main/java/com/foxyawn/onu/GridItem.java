@@ -1,13 +1,13 @@
 package com.foxyawn.onu;
 
-public class SingerItem {
+public class GridItem {
     String placeType;
     String district;
     String person;
     String address;
     int resId;
 
-    public SingerItem(String placeType, String district, String person, String address, int resId){
+    public GridItem(String placeType, String district, String person, String address, int resId){
         this.placeType = placeType;
         this.district=district;
         this.person=person;

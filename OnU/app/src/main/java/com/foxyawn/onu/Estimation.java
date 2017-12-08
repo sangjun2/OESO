@@ -23,7 +23,16 @@ public class Estimation {
         this.address = "";
         this.person = "";
         this.date = "";
-        this.provider=new ArrayList<String>();
+        provider = new ArrayList<String>();
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+
+    }
+
+    public void setProvider(ArrayList<String> provider) {
+        this.provider = provider;
     }
 
     public void setPlacetype(String placetype) {
@@ -73,6 +82,7 @@ public class Estimation {
     public String getDate() {
         return date;
     }
+
 
     public String getPrice() {
         return price;
