@@ -49,11 +49,11 @@ public class ListViewAdapter extends BaseAdapter {
         ListViewItem listViewItem = listViewItemList.get(position);
 
         // 아이템 내 각 위젯에 데이터 반영
-        type.setText(listViewItem.getType());
-        place.setText(listViewItem.getPlace());
+        type.setText(listViewItem.getPlacetype());
+        place.setText(listViewItem.getDistrict());
 
-        personal.setText(listViewItem.getPersonal());
-        day.setText(listViewItem.getDay());
+        personal.setText(listViewItem.getPerson());
+        day.setText(listViewItem.getDate());
 
         return convertView;
     }
@@ -74,10 +74,10 @@ public class ListViewAdapter extends BaseAdapter {
     public void addItem(String type, String place, String personal, String day) {
         ListViewItem item = new ListViewItem();
 
-        item.setType(type);
-        item.setPlace(place);
-        item.setPersonal(personal);
-        item.setDay(day);
+        item.setPlacetype(type);
+        item.setDistrict(place);
+        item.setPerson(personal);
+        item.setDate(day);
 
         listViewItemList.add(item);
     }

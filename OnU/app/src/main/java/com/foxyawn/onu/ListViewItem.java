@@ -5,39 +5,39 @@ package com.foxyawn.onu;
  */
 
 public class ListViewItem {
-    private String type ;
-    private String place ;
-    private String personal ;
-    private String day ;
+    private String placetype ;
+    private String district ;
+    private String person ;
+    private String date ;
 
-    public void setType(String type) {
-        this.type = type;
+    public void setPlacetype(String placetype) {
+        this.placetype = placetype;
     }
 
-    public String getType() {
-        return type;
+    public String getPlacetype() {
+        return placetype;
     }
-    public void setPlace(String place) {
-        this.place = place;
-    }
-
-    public String getPlace() {
-        return place;
+    public void setDistrict(String district) {
+        this.district = district;
     }
 
-    public void setPersonal(String personal) {
-        this.personal = personal;
+    public String getDistrict() {
+        return district;
     }
 
-    public String getPersonal() {
-        return personal;
+    public void setPerson(String person) {
+        this.person = person;
     }
 
-    public void setDay(String day) {
-        this.day = day;
+    public String getPerson() {
+        return person;
     }
 
-    public String getDay() {
-        return day;
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getDate() {
+        return date;
     }
 }
