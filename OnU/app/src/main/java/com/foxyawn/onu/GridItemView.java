@@ -11,25 +11,25 @@ import android.widget.TextView;
  * Created by jsb on 2017-11-29.
  */
 
-public class SingerItemView extends LinearLayout {
+public class GridItemView extends LinearLayout {
     TextView textView;
     TextView textView2;
     TextView textView3;
     TextView textView4;
     ImageView imageView;
 
-    public SingerItemView(Context context){
+    public GridItemView(Context context){
         super(context);
         init(context);
     }
 
-    public SingerItemView(Context context, AttributeSet attrs){
+    public GridItemView(Context context, AttributeSet attrs){
         super(context, attrs);
         init(context);
     }
     public void init(Context context){
         LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        inflater.inflate(R.layout.activity_singer_item,this, true);
+        inflater.inflate(R.layout.activity_grid_item,this, true);
 
         textView =(TextView)findViewById(R.id.company);
         textView2 =(TextView)findViewById(R.id.name);
@@ -39,7 +39,7 @@ public class SingerItemView extends LinearLayout {
     }
     public void setPlaceType(String placeType){textView.setText("["+placeType+"]");}
     public void setDistrict(String district){textView2.setText(district);}
-    public void setPerson(String person){textView3.setText("수용인원 : "+ person);}
+    public void setPerson(String person){textView3.setText("수용인원 : " + person);}
     public void setaddress(String address){textView4.setText(address);}
     public void setImage(int resId){imageView.setImageResource(resId);}
 }

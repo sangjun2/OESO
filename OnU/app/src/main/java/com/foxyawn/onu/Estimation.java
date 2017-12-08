@@ -1,5 +1,7 @@
 package com.foxyawn.onu;
 
+import java.util.ArrayList;
+
 /**
  * Created by jsb on 2017-11-26.
  */
@@ -12,6 +14,7 @@ public class Estimation {
     String person;
     String date;
     String price;
+    ArrayList<String> provider;
 
     Estimation (){
         this.price = "";
@@ -20,10 +23,15 @@ public class Estimation {
         this.address = "";
         this.person = "";
         this.date = "";
+        provider = new ArrayList<String>();
     }
 
     public void setPrice(String price) {
         this.price = price;
+    }
+
+    public void setProvider(ArrayList<String> provider) {
+        this.provider = provider;
     }
 
     public void setPlacetype(String placetype) {
@@ -60,5 +68,9 @@ public class Estimation {
     }
     public String getDate( ) {
         return date;
+    }
+
+    public ArrayList<String> getProvider() {
+        return provider;
     }
 }

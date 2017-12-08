@@ -14,6 +14,15 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
@@ -28,20 +37,24 @@ import java.util.ArrayList;
  */
 public class NotificationFragment extends Fragment {
     GridView gridView;
-    SingerAdapter adapter;
-    class SingerAdapter extends BaseAdapter {
-        ArrayList<SingerItem> items = new ArrayList<SingerItem>();
+    ArrayList<String> provider;
+    GridAdapter adapter;
+    private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+    private DatabaseReference databaseReference = firebaseDatabase.getReference();
+
+    class GridAdapter extends BaseAdapter {
+        ArrayList<GridItem> items = new ArrayList<GridItem>();
         @Override
         public int getCount() {return items.size();}
-        public void addIem(SingerItem item){items.add(item);}
+        public void addIem(GridItem item){items.add(item);}
         @Override
         public Object getItem(int position) {return items.get(position);}
         @Override
         public long getItemId(int position) {return position;}
         @Override
         public View getView(int position, View convertView, ViewGroup viewGroup) {
-            SingerItemView view = new SingerItemView(mContext);
-            SingerItem item = items.get(position);
+            GridItemView view = new GridItemView(mContext);
+            GridItem item = items.get(position);
             view.setPlaceType(item.getPlaceType());
             view.setDistrict(item.getDistrict());
             view.setPerson(item.getPerson());
@@ -50,7 +63,7 @@ public class NotificationFragment extends Fragment {
             int numColumns = gridView.getNumColumns();
             int rowIndex = position/numColumns;
             int columnIndex = position%numColumns;
-            Log.d("SingerAdapter","index : " + rowIndex+", "+columnIndex);
+            Log.d("GridAdapter","index : " + rowIndex+", "+columnIndex);
             return view;
         }
     }
@@ -66,7 +79,7 @@ public class NotificationFragment extends Fragment {
         DecimalFormat commas = new DecimalFormat("#,###");
         price = (String)commas.format(p);
         String comment = data.getStringExtra("comment");
-        adapter.addIem(new SingerItem(company, name, price, comment, R.drawable.aoa));
+        adapter.addIem(new GridItem(company, name, price, comment, R.drawable.aoa));
         adapter.notifyDataSetChanged();
 //        Toast.makeText(this,"상품이 등록되었습니다.",Toast.LENGTH_LONG).show();
     }
@@ -113,30 +126,74 @@ public class NotificationFragment extends Fragment {
         mContext = this.getActivity();
 //        this.getSupportActionBar().show();
 
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        Log.d("gigi",user.getUid());
+
+        databaseReference.child("contract").child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Estimation estimation = dataSnapshot.getValue(Estimation.class);
+                Log.d("address",estimation.getAddress());
+                Log.d("data",estimation.getDate());
+                Log.d("district",estimation.getDistrict());
+                Log.d("person",estimation.getPerson());
+                Log.d("pro",estimation.getProvider().get(0));
+                provider = estimation.getProvider();
+                init();
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+            public void init(){
+                for(int i =0; i<provider.size();i++){
+                    databaseReference.child("users").child("provider").child(provider.get(i)).child("info").addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            Info info = dataSnapshot.getValue(Info.class);
+                            adapter.addIem(new GridItem(info.getFacilities(),info.getName(),"7",info.getAddress(),R.drawable.hall2));
+                            adapter.notifyDataSetChanged();
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+            }
+        });
+
+
 
         View view = inflater.inflate(R.layout.fragment_notification, container, false);
         gridView = (GridView) view.findViewById(R.id.gridView);
 
-        adapter = new SingerAdapter();
-        adapter.addIem(new SingerItem("공연장","동구","3","상세주소1",R.drawable.hall2));
-        adapter.addIem(new SingerItem("숙소","중구","7","상세주소2",R.drawable.home));
-        adapter.addIem(new SingerItem("스터디룸","서구","5","상세주소3",R.drawable.study));
-        adapter.addIem(new SingerItem("연습실","유성구","3","상세주소4",R.drawable.practice));
+        adapter = new GridAdapter();
+        adapter.addIem(new GridItem("공연장","동구","3","상세주소1",R.drawable.hall2));
+        adapter.addIem(new GridItem("숙소","중구","7","상세주소2",R.drawable.home));
+        adapter.addIem(new GridItem("스터디룸","서구","5","상세주소3",R.drawable.study));
+        adapter.addIem(new GridItem("연습실","유성구","3","상세주소4",R.drawable.practice));
 
         gridView.setAdapter(adapter);
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                SingerItem item = (SingerItem) adapter.getItem(position);
-//                Toast.makeText(mContext,"선택된 제품 : "+item.getMobile()+"\n가격 : "+item.getPrice(),Toast.LENGTH_LONG).show();
-                Toast.makeText(mContext, "선택된 제품 : 숙소\n장소 : 중구\n최대수용 인원 : 7\n상세주소 : 중구 --동 -----",Toast.LENGTH_LONG).show();
+                GridItem item = (GridItem) adapter.getItem(position);
+                Toast.makeText(mContext,
+                        "선택 : "+item.getPlaceType()+
+                                "\n장소 : "+item.getDistrict()+
+                                "\n수용인원 : "+ item.getPerson()+
+                                "\n상세주소 : "+ item.getAddress()
+                        ,Toast.LENGTH_LONG).show();
             }
         });
 
