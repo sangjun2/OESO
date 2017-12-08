@@ -1,5 +1,6 @@
 package com.foxyawn.onu;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +22,7 @@ public class CustomDialog extends AppCompatActivity{
     public Button dialogButton1;
     public Button dialogButton2;
 
+    @SuppressLint("RestrictedApi")
     public AlertDialog getInstance(Context context, LayoutInflater inflater, int layout) {
         dialogView = inflater.inflate(layout, null);
 
@@ -32,7 +34,6 @@ public class CustomDialog extends AppCompatActivity{
     }
 
     public void show(String contentText, String buttonText) {
-
 
         dialogText = (TextView) dialogView.findViewById(R.id.dialog_text);
         dialogText.setText(contentText);
