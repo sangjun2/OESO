@@ -62,10 +62,10 @@ public class MainFragment extends Fragment {
                 mDatabase = FirebaseDatabase.getInstance().getReference();
                 user = FirebaseAuth.getInstance().getCurrentUser();
                 Toast.makeText(mContext, user.getUid(), Toast.LENGTH_LONG).show();
-                mDatabase.child("contract").child(user.getUid()).child("date").setValue(estimation.getDate());
-                mDatabase.child("contract").child(user.getUid()).child("number").setValue(estimation.getNumber());
-                mDatabase.child("contract").child(user.getUid()).child("place").setValue(estimation.getDistrict());
-                mDatabase.child("contract").child(user.getUid()).child("type").setValue(estimation.getPlacetype());
+                mDatabase.child("contract").child(user.getUid()).setValue(estimation);
+//                mDatabase.child("contract").child(user.getUid()).child("number").setValue(estimation.getNumber());
+//                mDatabase.child("contract").child(user.getUid()).child("place").setValue(estimation.getDistrict());
+//                mDatabase.child("contract").child(user.getUid()).child("type").setValue(estimation.getPlacetype());
             }
         });
 
