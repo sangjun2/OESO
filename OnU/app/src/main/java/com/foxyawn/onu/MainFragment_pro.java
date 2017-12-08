@@ -42,6 +42,8 @@ public class MainFragment_pro extends Fragment {
     private DatabaseReference databaseReference = firebaseDatabase.getReference();
     ArrayList<Estimation> estimations = new ArrayList<>();
     User userData;
+    ListView listView;
+    ListViewAdapter adapter;
 
 
 
@@ -68,7 +70,6 @@ public class MainFragment_pro extends Fragment {
         return fragment;
     }
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,10 +77,7 @@ public class MainFragment_pro extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        updateMy();
     }
-
-
 
     private void readContract() {
         databaseReference.child("contract").addChildEventListener(new ChildEventListener() {  // message는 child의 이벤트를 수신합니다.
@@ -91,7 +89,10 @@ public class MainFragment_pro extends Fragment {
                 String tempS = userData.getPlace();
                 if (temp!=null&&tempS.equals(tempString)){
                     estimations.add(estimation);
+                    Estimation print = estimation;
+                    adapter.addItem(print.getPlacetype(), print.place, print.getNumber(), print.getDate());
                 }
+
             }
 
             @Override
@@ -144,19 +145,12 @@ public class MainFragment_pro extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_main_pro,null);
 
-        ListView listView;
-        ListViewAdapter adapter;
+
+        updateMy();
 
         adapter = new ListViewAdapter();
         listView = (ListView)view.findViewById(R.id.listView);
         listView.setAdapter(adapter);
-
-
-        for(int i=0 ;i<1;i++) { // DB에서 뽑아와서 사용 버튼에 i넣을까 생각중
-            adapter.addItem("회의실", "대전광역시 유성구", "3명", "2017-09-24");
-            adapter.addItem("공연장", "서울특별시 강남구", "8명", "2017-08-23");
-            adapter.addItem("화장실", "부산광역시 부산구", "2명", "2017-06-22");
-        }
 
         return view;
 
