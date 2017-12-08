@@ -143,6 +143,7 @@ public class MainFragment_pro extends Fragment {
         updateMy();
         adapter = new ListViewAdapter();
         listView = (ListView)view.findViewById(R.id.listView);
+
         return view;
     }
 
