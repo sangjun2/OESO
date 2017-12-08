@@ -37,11 +37,11 @@
         android:text="day"
         android:layout_weight="2"
         />
+
     <Button
         android:id="@+id/regist"
         android:layout_width="wrap_content"
         android:layout_height="60dp"
-        android:text="신청하기"
         android:layout_weight="1"
-        />
+        android:text="신청하기" />
 </LinearLayout>

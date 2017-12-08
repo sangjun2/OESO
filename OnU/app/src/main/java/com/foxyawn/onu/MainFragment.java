@@ -63,9 +63,6 @@ public class MainFragment extends Fragment {
                 user = FirebaseAuth.getInstance().getCurrentUser();
                 Toast.makeText(mContext, user.getUid(), Toast.LENGTH_LONG).show();
                 mDatabase.child("contract").child(user.getUid()).setValue(estimation);
-//                mDatabase.child("contract").child(user.getUid()).child("number").setValue(estimation.getNumber());
-//                mDatabase.child("contract").child(user.getUid()).child("place").setValue(estimation.getDistrict());
-//                mDatabase.child("contract").child(user.getUid()).child("type").setValue(estimation.getPlacetype());
             }
         });
 
@@ -147,7 +144,6 @@ public class MainFragment extends Fragment {
 
             TextView title = (TextView) view.findViewById(R.id.group_title);
             title.setText(list.get(groupPosition).getTitle());
-
             return view;
         }
 
