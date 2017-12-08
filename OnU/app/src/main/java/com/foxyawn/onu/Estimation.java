@@ -28,6 +28,7 @@ public class Estimation {
 
     public void setPrice(String price) {
         this.price = price;
+
     }
 
     public void setProvider(ArrayList<String> provider) {
@@ -37,37 +38,54 @@ public class Estimation {
     public void setPlacetype(String placetype) {
         this.placetype = placetype;
     }
+
     public void setDistrict(String district) {
         this.district = district;
     }
+
     public void setAddress(String address) {
         this.address = address;
     }
+
     public void setPerson(String person) {
         this.person = person;
     }
+
     public void setDate(String date) {
         this.date = date;
     }
 
-    public String getPrice() {
-        return price;
+    public void setPrice(String price) {
+        this.price = price;
     }
 
-    public String getPlacetype( ) {
+    public void setProvider(ArrayList<String> provider) {
+        this.provider = provider;
+    }
+
+    public String getPlacetype() {
         return placetype;
     }
-    public String getDistrict( ) {
+
+    public String getDistrict() {
         return district;
     }
+
     public String getAddress() {
         return address;
     }
-    public String getPerson( ) {
+
+    public String getPerson() {
         return person;
     }
-    public String getDate( ) {
+
+    public String getDate() {
         return date;
+    }
+
+
+    public String getPrice() {
+        return price;
     }
 
     public ArrayList<String> getProvider() {

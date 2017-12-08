@@ -35,7 +35,6 @@ public class CustomDialog extends AppCompatActivity{
 
     public void show(String contentText, String buttonText) {
 
-
         dialogText = (TextView) dialogView.findViewById(R.id.dialog_text);
         dialogText.setText(contentText);
         dialogButton1 = (Button) dialogView.findViewById(R.id.dialog_button);
