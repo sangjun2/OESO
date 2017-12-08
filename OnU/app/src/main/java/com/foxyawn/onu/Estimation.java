@@ -8,8 +8,8 @@ public class Estimation {
 
     String placetype;
     String district;
-    String place;
-    String number;
+    String address;
+    String person;
     String date;
     String price;
 
@@ -17,8 +17,8 @@ public class Estimation {
         this.price = "";
         this.placetype = "";
         this.district = "";
-        this.place = "";
-        this.number = "";
+        this.address = "";
+        this.person = "";
         this.date = "";
     }
 
@@ -32,11 +32,11 @@ public class Estimation {
     public void setDistrict(String district) {
         this.district = district;
     }
-    public void setPlace(String place) {
-        this.place = place;
+    public void setAddress(String address) {
+        this.address = address;
     }
-    public void setNumber(String number) {
-        this.number = number;
+    public void setPerson(String person) {
+        this.person = person;
     }
     public void setDate(String date) {
         this.date = date;
@@ -52,11 +52,11 @@ public class Estimation {
     public String getDistrict( ) {
         return district;
     }
-    public String getPlace() {
-        return place;
+    public String getAddress() {
+        return address;
     }
-    public String getNumber( ) {
-        return number;
+    public String getPerson( ) {
+        return person;
     }
     public String getDate( ) {
         return date;

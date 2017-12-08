@@ -1,32 +1,59 @@
 package com.foxyawn.onu;
 
 public class SingerItem {
-    String name;
-    String mobile;
-    String price;
-    String comment;
+    String placeType;
+    String district;
+    String person;
+    String address;
     int resId;
 
-    public SingerItem(String name, String mobile, String price, String comment, int resId){
-        this.name = "["+name+"]";
-        this.mobile=mobile;
-        this.price="최대수용 인원: "+price;
-        this.comment=comment;
+    public SingerItem(String placeType, String district, String person, String address, int resId){
+        this.placeType = placeType;
+        this.district=district;
+        this.person=person;
+        this.address=address;
         this.resId= resId;
     }
-    public String getPrice(){return price;}
-    public void setPrice(String price){this.price=price;}
 
-    public String getComment(){return comment;}
-    public void setComment(String comment){this.comment=comment;}
+    public void setResId(int resId) {
+        this.resId = resId;
+    }
 
-    public int getResId(){return resId;}
-    public void setResId(int resId){this.resId=resId;}
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
-    public String getMobile(){return mobile;}
-    public void setMobile(String mobile){this.mobile=mobile;}
+    public void setDistrict(String district) {
+        this.district = district;
+    }
 
-    public String getName(){return name;}
-    public void setName(String name){this.name=name;}
+    public void setPerson(String person) {
+        this.person = person;
+    }
+
+    public void setPlaceType(String placeType) {
+        this.placeType = placeType;
+    }
+
+    public int getResId() {
+        return resId;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public String getDistrict() {
+        return district;
+    }
+
+    public String getPerson() {
+        return person;
+    }
+
+    public String getPlaceType() {
+        return placeType;
+    }
+
 }
 

@@ -42,10 +42,10 @@ public class NotificationFragment extends Fragment {
         public View getView(int position, View convertView, ViewGroup viewGroup) {
             SingerItemView view = new SingerItemView(mContext);
             SingerItem item = items.get(position);
-            view.setName(item.getName());
-            view.setMobile(item.getMobile());
-            view.setPrice(item.getPrice());
-            view.setComment(item.getComment());
+            view.setPlaceType(item.getPlaceType());
+            view.setDistrict(item.getDistrict());
+            view.setPerson(item.getPerson());
+            view.setaddress(item.getAddress());
             view.setImage(item.getResId());
             int numColumns = gridView.getNumColumns();
             int rowIndex = position/numColumns;
