@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -92,10 +93,10 @@ public class MainFragment_pro extends Fragment {
                 if (temp!=null&&tempS.equals(tempString)){
                     estimations.add(estimation);
                     Estimation print = estimation;
-                    adapter.addItem(print.getPlacetype(), print.getDistrict(), print.getPerson(), print.getDate());
+                    adapter.addItem(print);
+                    adapter.notifyDataSetChanged();
                 }
                 listView.setAdapter(adapter);
-
             }
 
             @Override
@@ -143,8 +144,41 @@ public class MainFragment_pro extends Fragment {
         View view = inflater.inflate(R.layout.fragment_main_pro,null);
         updateMy();
         adapter = new ListViewAdapter();
-        listView = (ListView)view.findViewById(R.id.listView);
 
+
+        listView = (ListView)view.findViewById(R.id.listView);
+        listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                final Estimation estimation = (Estimation) adapter.getItem(position);
+                AdapterView<?> pa = parent;
+//                databaseReference.child("contract").addChildEventListener(new ChildEventListener() {
+//                    @Override
+//                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+//                        User tempUser = dataSnapshot.getValue(User.class);
+//                        user = FirebaseAuth.getInstance().getCurrentUser();
+//                        if (user.getEmail().equals(tempUser.email)) {
+//                            userData = tempUser;
+//                            readContract();
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onChildChanged(DataSnapshot dataSnapshot, String s) { }
+//
+//                    @Override
+//                    public void onChildRemoved(DataSnapshot dataSnapshot) { }
+//
+//                    @Override
+//                    public void onChildMoved(DataSnapshot dataSnapshot, String s) { }
+//
+//                    @Override
+//                    public void onCancelled(DatabaseError databaseError) { }
+//                });
+            }
+        });
         return view;
     }
 
