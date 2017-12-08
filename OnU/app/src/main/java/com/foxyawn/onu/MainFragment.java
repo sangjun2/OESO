@@ -62,6 +62,8 @@ public class MainFragment extends Fragment {
                 mDatabase = FirebaseDatabase.getInstance().getReference();
                 user = FirebaseAuth.getInstance().getCurrentUser();
                 Toast.makeText(mContext, user.getUid(), Toast.LENGTH_LONG).show();
+                estimation.setEmail(user.getEmail());
+
                 mDatabase.child("contract").child(user.getUid()).setValue(estimation);
             }
         });
@@ -163,12 +165,10 @@ public class MainFragment extends Fragment {
                         if (groupPosition == 0){
                             estimation.setPlacetype(button.getText().toString());
                             button.setBackgroundColor(R.color.selected);
-//                            Log.d("first",estimation.getPlacetype());
                         }
                         else{
                             estimation.setDistrict(button.getText().toString());
                             button.setBackgroundColor(R.color.selected);
-//                            Log.d("second",estimation.getDistrict());
                         }
                     }
                 });
@@ -183,7 +183,6 @@ public class MainFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         estimation.setPerson(editText.getText().toString());
-//                        Log.d("third",estimation.getNumber());
                     }
                 });
             } else if(groupPosition == 3) { // 날짜
@@ -196,7 +195,6 @@ public class MainFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         estimation.setDate(editText.getText().toString());
-//                        Log.d("fourth",estimation.getDate());
                     }
                 });
             }
