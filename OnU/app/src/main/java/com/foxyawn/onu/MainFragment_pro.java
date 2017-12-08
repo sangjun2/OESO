@@ -95,6 +95,7 @@ public class MainFragment_pro extends Fragment {
                     adapter.addItem(print.getPlacetype(), print.getDistrict(), print.getPerson(), print.getDate());
                 }
                 listView.setAdapter(adapter);
+
             }
 
             @Override
