@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -90,9 +91,9 @@ public class MainFragment_pro extends Fragment {
                 if (temp!=null&&tempS.equals(tempString)){
                     estimations.add(estimation);
                     Estimation print = estimation;
-                    adapter.addItem(print.getPlacetype(), print.place, print.getNumber(), print.getDate());
+                    adapter.addItem(print.getPlacetype(), print.getDistrict(), print.getPerson(), print.getDate());
                 }
-
+                listView.setAdapter(adapter);
             }
 
             @Override
@@ -120,6 +121,7 @@ public class MainFragment_pro extends Fragment {
                 if (user.getEmail().equals(tempUser.email)) {
                     userData = tempUser;
                     readContract();
+                    return;
                 }
             }
 
@@ -144,13 +146,17 @@ public class MainFragment_pro extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_main_pro,null);
+        Button btn = (Button) view.findViewById(R.id.imageView);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-
+            }
+        });
         updateMy();
 
         adapter = new ListViewAdapter();
         listView = (ListView)view.findViewById(R.id.listView);
-        listView.setAdapter(adapter);
 
         return view;
 
