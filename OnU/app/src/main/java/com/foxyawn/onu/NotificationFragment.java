@@ -16,7 +16,6 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -81,10 +80,8 @@ public class NotificationFragment extends Fragment {
         String comment = data.getStringExtra("comment");
         adapter.addIem(new GridItem(company, name, price, comment, R.drawable.aoa));
         adapter.notifyDataSetChanged();
-//        Toast.makeText(this,"상품이 등록되었습니다.",Toast.LENGTH_LONG).show();
     }
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -98,15 +95,6 @@ public class NotificationFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment NotificationFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static NotificationFragment newInstance(String param1, String param2) {
         NotificationFragment fragment = new NotificationFragment();
         Bundle args = new Bundle();
@@ -124,9 +112,6 @@ public class NotificationFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         mContext = this.getActivity();
-//        this.getSupportActionBar().show();
-
-
     }
 
     @Override
@@ -135,8 +120,7 @@ public class NotificationFragment extends Fragment {
         // Inflate the layout for this fragment
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         Log.d("gigi",user.getUid());
-
-        databaseReference.child("contract").child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+        databaseReference.child("contract").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Estimation estimation = dataSnapshot.getValue(Estimation.class);

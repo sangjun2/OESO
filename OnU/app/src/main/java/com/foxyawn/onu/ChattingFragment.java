@@ -7,41 +7,35 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link ChattingFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link ChattingFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class ChattingFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
     private OnFragmentInteractionListener mListener;
+    TextView placetype;
+    TextView district;
+    TextView person;
+    TextView date;
+    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+    private DatabaseReference databaseReference = firebaseDatabase.getReference();
 
     public ChattingFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ChattingFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static ChattingFragment newInstance(String param1, String param2) {
         ChattingFragment fragment = new ChattingFragment();
         Bundle args = new Bundle();
@@ -61,13 +55,44 @@ public class ChattingFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_chatting, container, false);
+        View view = inflater.inflate(R.layout.fragment_chatting,null);
+        placetype = (TextView) view.findViewById(R.id.placetype);
+        district = (TextView) view.findViewById(R.id.district);
+        person = (TextView) view.findViewById(R.id.person);
+        date = (TextView) view.findViewById(R.id.date);
+        updateEstimation();
+        return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
+    private void updateEstimation() {
+        databaseReference.child("contract").addChildEventListener(new ChildEventListener() {  // message는 child의 이벤트를 수신합니다.
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Estimation estimation = dataSnapshot.getValue(Estimation.class);
+                if (estimation != null && user != null && estimation.getEmail().equals(user.getEmail())){
+                    placetype.setText(estimation.getPlacetype());
+                    district.setText(estimation.getDistrict());
+                    person.setText(estimation.getPerson());
+                    date.setText(estimation.getDate());
+                }
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) { }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) { }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) { }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) { }
+        });
+    }
+
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -80,8 +105,7 @@ public class ChattingFragment extends Fragment {
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+            throw new RuntimeException(context.toString() + " must implement OnFragmentInteractionListener");
         }
     }
 
@@ -91,18 +115,7 @@ public class ChattingFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 }

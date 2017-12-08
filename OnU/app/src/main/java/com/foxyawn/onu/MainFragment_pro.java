@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -20,25 +19,13 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
-
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link MainFragment_pro.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link MainFragment_pro#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class MainFragment_pro extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
     private OnFragmentInteractionListener mListener;
-    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     private DatabaseReference databaseReference = firebaseDatabase.getReference();
     ArrayList<Estimation> estimations = new ArrayList<>();
@@ -47,22 +34,11 @@ public class MainFragment_pro extends Fragment {
     ListViewAdapter adapter;
     Context mContext;
 
-
-
     public MainFragment_pro() {
         // Required empty public constructor
 
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment MainFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static MainFragment_pro newInstance(String param1, String param2) {
         MainFragment_pro fragment = new MainFragment_pro();
         Bundle args = new Bundle();
@@ -144,45 +120,11 @@ public class MainFragment_pro extends Fragment {
         View view = inflater.inflate(R.layout.fragment_main_pro,null);
         updateMy();
         adapter = new ListViewAdapter();
-
-
         listView = (ListView)view.findViewById(R.id.listView);
         listView.setAdapter(adapter);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                final Estimation estimation = (Estimation) adapter.getItem(position);
-                AdapterView<?> pa = parent;
-//                databaseReference.child("contract").addChildEventListener(new ChildEventListener() {
-//                    @Override
-//                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-//                        User tempUser = dataSnapshot.getValue(User.class);
-//                        user = FirebaseAuth.getInstance().getCurrentUser();
-//                        if (user.getEmail().equals(tempUser.email)) {
-//                            userData = tempUser;
-//                            readContract();
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onChildChanged(DataSnapshot dataSnapshot, String s) { }
-//
-//                    @Override
-//                    public void onChildRemoved(DataSnapshot dataSnapshot) { }
-//
-//                    @Override
-//                    public void onChildMoved(DataSnapshot dataSnapshot, String s) { }
-//
-//                    @Override
-//                    public void onCancelled(DatabaseError databaseError) { }
-//                });
-            }
-        });
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -205,18 +147,7 @@ public class MainFragment_pro extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 }
