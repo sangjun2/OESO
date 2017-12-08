@@ -17,6 +17,9 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -26,8 +29,9 @@ import java.util.ArrayList;
 public class MainFragment extends Fragment {
     public Context mContext;
     Estimation estimation;
-    DatabaseReference mDatabase;
-    FirebaseUser user;
+    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+    private DatabaseReference databaseReference = firebaseDatabase.getReference();
 
     public MainFragment() {
         // Required empty public constructor
@@ -53,47 +57,105 @@ public class MainFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
-        ExpandableListView listView = (ExpandableListView) view.findViewById(R.id.expanded_menu);
+        final ExpandableListView listView = (ExpandableListView) view.findViewById(R.id.expanded_menu);
         Button applyButton = (Button) view.findViewById(R.id.apply_button);
         applyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(mContext, "공간유형 : "+estimation.getPlacetype()+"\n"+"구 : "+estimation.getDistrict()+"\n"+"인원 : "+estimation.getPerson()+"\n"+"날짜 : "+estimation.getDate(), Toast.LENGTH_LONG).show();
-                mDatabase = FirebaseDatabase.getInstance().getReference();
+                databaseReference = FirebaseDatabase.getInstance().getReference();
                 user = FirebaseAuth.getInstance().getCurrentUser();
                 Toast.makeText(mContext, user.getUid(), Toast.LENGTH_LONG).show();
                 estimation.setEmail(user.getEmail());
 
-                mDatabase.child("contract").child(user.getUid()).setValue(estimation);
+                databaseReference.child("contract").child(user.getUid()).setValue(estimation);
             }
         });
 
 
         ArrayList<Item> groupList = new ArrayList<>();
-        ArrayList<String> typeList = new ArrayList<>();
-        typeList.add("공연장");
-        typeList.add("숙소");
-        typeList.add("스터디룸");
-        typeList.add("연습실");
-        typeList.add("카페");
-        typeList.add("파티룸");
-        typeList.add("회의실");
+        final ArrayList<String> typeList = new ArrayList<>();
+        databaseReference.child("type").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                 String typeString = dataSnapshot.getKey();
+                 typeList.add(typeString);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) { }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) { }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) { }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) { }
+        });
         Item item = new Item("공간유형", typeList);
         groupList.add(item);
+        final ArrayList<String> districtList = new ArrayList<>();
+        databaseReference.child("place").child("대전광역시").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                String typeString = (String) dataSnapshot.getValue();
+                districtList.add(typeString);
+            }
 
-        ArrayList<String> districtList = new ArrayList<>();
-        districtList.add("동구");
-        districtList.add("중구");
-        districtList.add("서구");
-        districtList.add("유성구");
-        districtList.add("대덕구");
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) { }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) { }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) { }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) { }
+        });
         groupList.add(new Item("구", districtList));
 
         groupList.add(new Item("인원", null));
         groupList.add(new Item("날짜", null));
 
-        ExpandableListViewAdapter adapter = new ExpandableListViewAdapter(groupList);
+        final ExpandableListViewAdapter adapter = new ExpandableListViewAdapter(groupList);
         listView.setAdapter(adapter);
+
+        // 그룹 클릭
+        listView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+            @Override
+            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+                return false;
+            }
+        });
+
+        // 차일드 클릭
+        listView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+                return true;
+            }
+        });
+
+        // 그룹 닫힘
+        listView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
+            @Override
+            public void onGroupCollapse(int groupPosition) {
+
+            }
+        });
+
+        // 그룹 열림
+        listView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+            @Override
+            public void onGroupExpand(int groupPosition) {
+                for (int i = 0 ; i < adapter.getGroupCount(); i++){
+                }
+            }
+        });
 
         return view;
     }
@@ -150,7 +212,7 @@ public class MainFragment extends Fragment {
         }
 
         @Override
-        public View getChildView(final int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+        public View getChildView(final int groupPosition, final int childPosition, boolean isLastChild, final View convertView, final ViewGroup parent) {
             View view = null;
 
             if(groupPosition == 0 || groupPosition == 1) { //공간유형 , 구
@@ -164,7 +226,11 @@ public class MainFragment extends Fragment {
                     public void onClick(View v) {
                         if (groupPosition == 0){
                             estimation.setPlacetype(button.getText().toString());
+                            for (int i = 0; i < getChildrenCount(0); i++){
+
+                            }
                             button.setBackgroundColor(R.color.selected);
+
                         }
                         else{
                             estimation.setDistrict(button.getText().toString());
@@ -186,7 +252,7 @@ public class MainFragment extends Fragment {
                     }
                 });
             } else if(groupPosition == 3) { // 날짜
-                view = LayoutInflater.from(mContext).inflate(R.layout.number_child_item, null);
+                view = LayoutInflater.from(mContext).inflate(R.layout.date_child_item, null);
                 final EditText editText = (EditText) view.findViewById(R.id.number_child_item);
                 editText.setInputType(InputType.TYPE_CLASS_DATETIME);
 
