@@ -43,6 +43,5 @@
         android:layout_width="wrap_content"
         android:layout_height="60dp"
         android:layout_weight="1"
-        android:onClick="regist"
         android:text="신청하기" />
 </LinearLayout>
