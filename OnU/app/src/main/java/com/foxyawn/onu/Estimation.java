@@ -15,6 +15,7 @@ public class Estimation {
     String date;
     String price;
     ArrayList<String> provider;
+    String email;
 
     Estimation (){
         this.price = "";
@@ -24,6 +25,8 @@ public class Estimation {
         this.person = "";
         this.date = "";
         this.provider=new ArrayList<String>();
+        provider.add("");
+        this.email="";
     }
 
     public void setPlacetype(String placetype) {
@@ -54,6 +57,10 @@ public class Estimation {
         this.provider = provider;
     }
 
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public String getPlacetype() {
         return placetype;
     }
@@ -80,5 +87,9 @@ public class Estimation {
 
     public ArrayList<String> getProvider() {
         return provider;
+    }
+
+    public String getEmail() {
+        return email;
     }
 }
