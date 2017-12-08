@@ -95,6 +95,7 @@ public class MainFragment_pro extends Fragment {
                     adapter.addItem(print.getPlacetype(), print.getDistrict(), print.getPerson(), print.getDate());
                 }
                 listView.setAdapter(adapter);
+
             }
 
             @Override
@@ -143,6 +144,7 @@ public class MainFragment_pro extends Fragment {
         updateMy();
         adapter = new ListViewAdapter();
         listView = (ListView)view.findViewById(R.id.listView);
+
         return view;
     }
 
