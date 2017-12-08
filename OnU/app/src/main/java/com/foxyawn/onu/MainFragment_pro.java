@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ListView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -45,6 +44,7 @@ public class MainFragment_pro extends Fragment {
     User userData;
     ListView listView;
     ListViewAdapter adapter;
+    Context mContext;
 
 
 
@@ -58,9 +58,9 @@ public class MainFragment_pro extends Fragment {
      * this fragment using the provided parameters.
      *
      * @param param1 Parameter 1.
-            * @param param2 Parameter 2.
-            * @return A new instance of fragment MainFragment.
-            */
+     * @param param2 Parameter 2.
+     * @return A new instance of fragment MainFragment.
+     */
     // TODO: Rename and change types and number of parameters
     public static MainFragment_pro newInstance(String param1, String param2) {
         MainFragment_pro fragment = new MainFragment_pro();
@@ -74,6 +74,7 @@ public class MainFragment_pro extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mContext = getContext();
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -97,9 +98,7 @@ public class MainFragment_pro extends Fragment {
             }
 
             @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) { }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) { }
@@ -113,7 +112,7 @@ public class MainFragment_pro extends Fragment {
     }
 
     public void updateMy() {
-        databaseReference.child("users").child("provider").addChildEventListener(new ChildEventListener() {  // message는 child의 이벤트를 수신합니다.
+        databaseReference.child("users").child("provider").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 User tempUser = dataSnapshot.getValue(User.class);
@@ -121,14 +120,11 @@ public class MainFragment_pro extends Fragment {
                 if (user.getEmail().equals(tempUser.email)) {
                     userData = tempUser;
                     readContract();
-                    return;
                 }
             }
 
             @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) { }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) { }
@@ -142,24 +138,12 @@ public class MainFragment_pro extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main_pro,null);
-        Button btn = (Button) view.findViewById(R.id.imageView);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
         updateMy();
-
         adapter = new ListViewAdapter();
         listView = (ListView)view.findViewById(R.id.listView);
-
         return view;
-
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -167,7 +151,6 @@ public class MainFragment_pro extends Fragment {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
-
     }
 
     @Override
@@ -176,8 +159,7 @@ public class MainFragment_pro extends Fragment {
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+            throw new RuntimeException(context.toString() + " must implement OnFragmentInteractionListener");
         }
     }
 
