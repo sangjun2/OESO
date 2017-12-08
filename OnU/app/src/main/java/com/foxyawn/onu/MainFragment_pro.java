@@ -90,8 +90,9 @@ public class MainFragment_pro extends Fragment {
                 if (temp!=null&&tempS.equals(tempString)){
                     estimations.add(estimation);
                     Estimation print = estimation;
-                    adapter.addItem(print.getPlacetype(), print.place, print.getNumber(), print.getDate());
+                    adapter.addItem(print.getPlacetype(), print.getAddress(), print.getPerson(), print.getDate());
                 }
+                listView.setAdapter(adapter);
 
             }
 
@@ -150,7 +151,6 @@ public class MainFragment_pro extends Fragment {
 
         adapter = new ListViewAdapter();
         listView = (ListView)view.findViewById(R.id.listView);
-        listView.setAdapter(adapter);
 
         return view;
 
