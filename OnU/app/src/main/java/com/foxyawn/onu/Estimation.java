@@ -27,6 +27,7 @@ public class Estimation {
         this.provider=new ArrayList<String>();
         provider.add("");
         this.email="";
+
     }
 
     public void setPlacetype(String placetype) {
@@ -80,6 +81,7 @@ public class Estimation {
     public String getDate() {
         return date;
     }
+
 
     public String getPrice() {
         return price;
