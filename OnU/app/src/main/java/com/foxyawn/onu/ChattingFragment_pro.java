@@ -224,7 +224,7 @@ public class ChattingFragment_pro extends Fragment {
         applyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext, "공간유형 : "+estimation.getPlacetype()+"\n"+"구 : "+estimation.getDistrict()+"\n"+"상세주소 : "+estimation.getPlace()+"\n인원 : "+estimation.getNumber()+"\n가격 : "+estimation.getPrice(), Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, "공간유형 : "+estimation.getPlacetype()+"\n"+"구 : "+estimation.getDistrict()+"\n"+"상세주소 : "+estimation.getAddress()+"\n인원 : "+estimation.getPerson()+"\n가격 : "+estimation.getPrice(), Toast.LENGTH_LONG).show();
             }
         });
         ArrayList<Item> groupList = new ArrayList<>();
@@ -341,7 +341,7 @@ public class ChattingFragment_pro extends Fragment {
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        estimation.setPlace(editText.getText().toString());
+                        estimation.setAddress(editText.getText().toString());
 //                        Log.d("third",estimation.getNumber());
                     }
                 });
@@ -354,7 +354,7 @@ public class ChattingFragment_pro extends Fragment {
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        estimation.setNumber(editText.getText().toString());
+                        estimation.setPerson(editText.getText().toString());
 //                        Log.d("fourth",estimation.getDate());
                     }
                 });

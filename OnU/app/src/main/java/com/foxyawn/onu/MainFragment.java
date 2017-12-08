@@ -58,7 +58,7 @@ public class MainFragment extends Fragment {
         applyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext, "공간유형 : "+estimation.getPlacetype()+"\n"+"구 : "+estimation.getDistrict()+"\n"+"인원 : "+estimation.getNumber()+"\n"+"날짜 : "+estimation.getDate(), Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, "공간유형 : "+estimation.getPlacetype()+"\n"+"구 : "+estimation.getDistrict()+"\n"+"인원 : "+estimation.getPerson()+"\n"+"날짜 : "+estimation.getDate(), Toast.LENGTH_LONG).show();
                 mDatabase = FirebaseDatabase.getInstance().getReference();
                 user = FirebaseAuth.getInstance().getCurrentUser();
                 Toast.makeText(mContext, user.getUid(), Toast.LENGTH_LONG).show();
@@ -186,7 +186,7 @@ public class MainFragment extends Fragment {
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        estimation.setNumber(editText.getText().toString());
+                        estimation.setPerson(editText.getText().toString());
 //                        Log.d("third",estimation.getNumber());
                     }
                 });

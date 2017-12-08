@@ -37,9 +37,9 @@ public class SingerItemView extends LinearLayout {
         textView4 =(TextView)findViewById(R.id.comment);
         imageView = (ImageView) findViewById(R.id.imageView);
     }
-    public void setName(String name){textView.setText(name);}
-    public void setMobile(String mobile){textView2.setText(mobile);}
-    public void setPrice(String price){textView3.setText(price);}
-    public void setComment(String comment){textView4.setText(comment);}
+    public void setPlaceType(String placeType){textView.setText("["+placeType+"]");}
+    public void setDistrict(String district){textView2.setText(district);}
+    public void setPerson(String person){textView3.setText("수용인원 : "+ person);}
+    public void setaddress(String address){textView4.setText(address);}
     public void setImage(int resId){imageView.setImageResource(resId);}
 }
