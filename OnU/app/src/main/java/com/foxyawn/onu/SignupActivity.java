@@ -4,20 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
-import android.support.annotation.NonNull;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.view.ContextThemeWrapper;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.JsonReader;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -25,7 +18,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,17 +32,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 public class SignupActivity extends AppCompatActivity {
@@ -220,18 +204,17 @@ public class SignupActivity extends AppCompatActivity {
                                     String userPassword = passwordText.getText().toString();
                                     String userTel = phoneText.getText().toString();
                                     String userName = nameText.getText().toString();
-
-                                    Map<String, String> userValues;
+                                    Info info = new Info();
+                                    Map<String, Object> userValues;
                                     Map<String, Object> childUpdates = new HashMap<String, Object>();
 
                                     if(isProviderChecked) { // provider
                                         String userPlace = citySpinner.getSelectedItem().toString() + " " + districtSpinner.getSelectedItem().toString();
-
-                                        newUser = new User(userEmail, userPassword, userName, userTel, userPlace);
+                                        newUser = new User(userEmail, userPassword, userName, userTel, userPlace, info);
                                         userValues = newUser.toMap();
                                         childUpdates.put("/provider/" + uid, userValues);
                                     } else { // consumer
-                                        newUser = new User(userEmail, userPassword, userName, userTel, null);
+                                        newUser = new User(userEmail, userPassword, userName, userTel, null,info);
                                         userValues = newUser.toMap();
                                         childUpdates.put("/consumer/" + uid, userValues);
                                     }
