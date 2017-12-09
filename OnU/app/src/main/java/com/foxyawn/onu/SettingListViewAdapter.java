@@ -10,14 +10,18 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-/**
- * Created by Sangjun on 2017-09-18.
- */
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class SettingListViewAdapter extends BaseAdapter {
 
     private String[] list;
     private SharedPreferences preferences;
+    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+    private DatabaseReference databaseReference = firebaseDatabase.getReference();
 
     public SettingListViewAdapter(SharedPreferences preferences, String[] list) {
         this.preferences = preferences;
@@ -72,6 +76,9 @@ public class SettingListViewAdapter extends BaseAdapter {
                         @Override
                         public void onClick(View v) {
                             Toast.makeText(context,"개인정보 변경",Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(context,ChangeSign.class);
+                            intent.putExtra("type", preferences.getString("type", ""));
+                            context.startActivity(intent);
                         }
                     });
                 }
