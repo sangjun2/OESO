@@ -10,15 +10,15 @@ import java.util.Map;
  */
 
 public class Info {
-    public String address;
-    public String around;
-    public String etc;
-    public String facilities;
-    public String introduce;
-    public String name;
-    public String notice;
-    public String purpose;
-    public String time;
+    public String address= "";
+    public String around = "";
+    public String etc = "";
+    public String facilities= "";
+    public String introduce = "";
+    public String name = "";
+    public String notice = "";
+    public String purpose = "";
+    public String time = "";
 
     public Info() {
         this.address = "";
