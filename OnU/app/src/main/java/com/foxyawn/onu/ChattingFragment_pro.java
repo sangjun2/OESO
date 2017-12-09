@@ -10,9 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-
 import android.support.annotation.NonNull;
-
 import android.support.v4.app.Fragment;
 import android.text.InputType;
 import android.util.Log;
@@ -28,9 +26,20 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 
 import static android.app.Activity.RESULT_OK;
@@ -40,25 +49,25 @@ public class ChattingFragment_pro extends Fragment {
 
     public Context mContext;
     Info info;
+    Estimation estimation;
+    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+    private DatabaseReference databaseReference = firebaseDatabase.getReference();
 
     public ChattingFragment_pro() {
         // Required empty public constructor
         info = new Info();
     }
 
-
-    // TODO: Rename and change types and number of parameters
     public static ChattingFragment_pro newInstance() {
         ChattingFragment_pro fragment = new ChattingFragment_pro();
         return fragment;
     }
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = getContext();
-
     }
 
     @Override
@@ -68,7 +77,84 @@ public class ChattingFragment_pro extends Fragment {
         if(resultCode != RESULT_OK)
             return;
 
+        if(resultCode != RESULT_OK) return;
+        switch(requestCode)
+        {
+            case PICK_FROM_ALBUM:
+                mlmageCaptureUri = data.getData();
+                Log.d("SmartWheel",mlmageCaptureUri.getPath().toString());
+            case PICK_FROM_CAMERA:
+                Intent intent = new Intent("com.android.camera.action.CROP");
+                intent.setDataAndType(mlmageCaptureUri,"image/*");
 
+                intent.putExtra("outputX",200);
+                intent.putExtra("outputY",200);
+                intent.putExtra("aspectX",1);
+                intent.putExtra("aspectY",1);
+                intent.putExtra("scale",true);
+                intent.putExtra("return-data",true);
+                startActivityForResult(intent, CROP_FROM_IMAGE);
+                break;
+
+            case CROP_FROM_IMAGE:
+                if(resultCode != RESULT_OK){
+                    return ;
+                }
+                final Bundle extras = data.getExtras();
+
+                String filePath = Environment.getExternalStorageDirectory().getAbsolutePath()+"/SmartWheel/"+System.currentTimeMillis()+".jpg";
+
+                if(extras != null)
+                {
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    user.getUid();
+                    Bitmap photo = extras.getParcelable("data");
+                    mStorageRef = FirebaseStorage.getInstance().getReference();
+
+                    StorageReference imagefolder = mStorageRef.child("image");
+                    StorageReference imagefile = imagefolder.child("hihi");
+                    img.setImageBitmap(photo);
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    photo.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                    byte[] photodata = baos.toByteArray();
+                    UploadTask uploadTask = imagefile.putBytes(photodata);
+                    uploadTask.addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getContext(),"실패",Toast.LENGTH_LONG).show();
+
+                        }
+                    }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            Toast.makeText(getContext(),"성공",Toast.LENGTH_LONG).show();
+
+                        }
+                    });
+
+                    storeCropImage(photo,filePath);
+
+                    break;
+                }
+                File f = new File(mlmageCaptureUri.getPath());
+                if(f.exists()){
+                    f.delete();
+                }
+        }
+    }
+    private void storeCropImage(Bitmap bitmap, String filePath){
+        String dirPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/SmartWheel";
+        File directory_SmartWheel = new File(dirPath);
+        if(!directory_SmartWheel.exists()){
+            directory_SmartWheel.mkdir();
+        }
+        File copyFile = new File(filePath);
+        BufferedOutputStream out = null;
+
+        try{
+            copyFile.createNewFile();
+            out=new BufferedOutputStream(new FileOutputStream(copyFile));
+            bitmap.compress(Bitmap.CompressFormat.JPEG,100,out);
     }
 
     @Override
@@ -94,15 +180,52 @@ public class ChattingFragment_pro extends Fragment {
         });
         ArrayList<Item> groupList = new ArrayList<>();
 
-        groupList.add(new Item("이름", null));
-        groupList.add(new Item("공간유형", null));
-        groupList.add(new Item("소개", null));
-        groupList.add(new Item("주소", null));
-        groupList.add(new Item("이용가능 시간", null));
-        groupList.add(new Item("내부시설", null));
-        groupList.add(new Item("주변시설", null));
-        groupList.add(new Item("주의사항", null));
-        groupList.add(new Item("기타",null));
+        final ArrayList<String> typeList = new ArrayList<>();
+        databaseReference.child("type").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                String typeString = dataSnapshot.getKey();
+                typeList.add(typeString);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) { }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) { }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) { }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) { }
+        });
+
+        groupList.add(new Item("공간유형", typeList));
+        final ArrayList<String> districtList = new ArrayList<>();
+        databaseReference.child("place").child("대전광역시").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                String typeString = (String) dataSnapshot.getValue();
+                districtList.add(typeString);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) { }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) { }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) { }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) { }
+        });
+        groupList.add(new Item("구", districtList));
+        groupList.add(new Item("상세주소", null));
+        groupList.add(new Item("최대수용인원", null));
+        groupList.add(new Item("가격",null));
         ExpandableListViewAdapter adapter = new ExpandableListViewAdapter(groupList);
         listView.setAdapter(adapter);
 

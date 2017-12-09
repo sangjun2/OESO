@@ -226,11 +226,7 @@ public class MainFragment extends Fragment {
                     public void onClick(View v) {
                         if (groupPosition == 0){
                             estimation.setPlacetype(button.getText().toString());
-                            for (int i = 0; i < getChildrenCount(0); i++){
-
-                            }
                             button.setBackgroundColor(R.color.selected);
-
                         }
                         else{
                             estimation.setDistrict(button.getText().toString());

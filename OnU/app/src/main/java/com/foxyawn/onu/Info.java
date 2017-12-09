@@ -21,20 +21,17 @@ public class Info {
     public String time = "";
 
     public Info() {
-
+        this.address = "";
+        this.around = "";
+        this.etc = "";
+        this.facilities = "";
+        this.introduce = "";
+        this.name = "";
+        this.notice = "";
+        this.purpose = "";
+        this.time = "";
     }
 
-    public Info(String address, String around, String etc, String facilities, String introduce, String name, String notice, String purpose, String time) {
-        this.address = address;
-        this.around = around;
-        this.etc = etc;
-        this.facilities = facilities;
-        this.introduce = introduce;
-        this.name = name;
-        this.notice = notice;
-        this.purpose = purpose;
-        this.time = time;
-    }
     @Exclude
     public Map<String, String> toMap() {
         HashMap<String, String> result = new HashMap<>();
