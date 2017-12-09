@@ -115,12 +115,12 @@ public class ChattingFragment_pro extends Fragment {
                 if(extras != null)
                 {
                     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
+                    user.getUid();
                     Bitmap photo = extras.getParcelable("data");
                     mStorageRef = FirebaseStorage.getInstance().getReference();
 
-                    StorageReference imagefolder = mStorageRef.child(user.getUid());
-                    StorageReference imagefile = imagefolder.child("image");
+                    StorageReference imagefolder = mStorageRef.child("image");
+                    StorageReference imagefile = imagefolder.child("hihi");
                     img.setImageBitmap(photo);
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     photo.compress(Bitmap.CompressFormat.JPEG, 100, baos);
