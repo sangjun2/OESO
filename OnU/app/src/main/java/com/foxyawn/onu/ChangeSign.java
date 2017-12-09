@@ -36,7 +36,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-public class SignupActivity extends AppCompatActivity {
+public class ChangeSign extends AppCompatActivity {
     ProgressBar progressBar;
     ArrayList<City> cities;
     boolean isProviderChecked;
@@ -194,7 +194,7 @@ public class SignupActivity extends AppCompatActivity {
 
                         final String email = emailText.getText().toString();
                         mAuth = FirebaseAuth.getInstance();
-                        mAuth.createUserWithEmailAndPassword(email, pw).addOnCompleteListener(SignupActivity.this, new OnCompleteListener<AuthResult>() {
+                        mAuth.createUserWithEmailAndPassword(email, pw).addOnCompleteListener(ChangeSign.this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if(task.isSuccessful()) {
@@ -260,13 +260,11 @@ public class SignupActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-
         overridePendingTransition(R.anim.anim_slide_right, R.anim.anim_slide_left);
     }
 
     private boolean checkText(EditText input) {
         String str = input.getText().toString();
-
         return !str.equals("") && str.length() > 0;
     }
 }

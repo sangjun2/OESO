@@ -21,10 +21,6 @@ public class Info {
     public String time;
 
     public Info() {
-
-    }
-
-    public Info(String address, String around, String etc, String facilities, String introduce, String name, String notice, String purpose, String time) {
         this.address = address;
         this.around = around;
         this.etc = etc;
@@ -35,6 +31,7 @@ public class Info {
         this.purpose = purpose;
         this.time = time;
     }
+
     @Exclude
     public Map<String, String> toMap() {
         HashMap<String, String> result = new HashMap<>();
