@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Created by Sangjun on 2017-09-18.
@@ -58,8 +59,23 @@ public class SettingListViewAdapter extends BaseAdapter {
 
                 TextView settingText = (TextView) convertView.findViewById(R.id.setting_text);
                 settingText.setText(this.list[position - 1]);
-
-                if(this.list[position - 1].equals("로그아웃")) {
+                if(this.list[position-1].equals("이용 내역")){
+                    convertView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Toast.makeText(context,"이용내역",Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+                else if(this.list[position-1].equals("개인정보 변경")) {
+                    convertView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Toast.makeText(context,"개인정보 변경",Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+                else if(this.list[position - 1].equals("로그아웃")) {
                     convertView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
