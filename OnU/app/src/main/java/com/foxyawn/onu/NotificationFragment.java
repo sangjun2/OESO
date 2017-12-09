@@ -113,36 +113,58 @@ public class NotificationFragment extends Fragment {
         }
         mContext = this.getActivity();
     }
+    class Stringvalue{
+        String yet;
+        public Stringvalue(String yet){
+            this.yet = yet;
+        }
 
+        public String getYet() {
+            return yet;
+        }
+
+        public void setYet(String yet) {
+            this.yet = yet;
+        }
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        Log.d("gigi",user.getUid());
-        databaseReference.child("contract").addListenerForSingleValueEvent(new ValueEventListener() {
+
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+
+
+        databaseReference.child("contract").child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Estimation estimation = dataSnapshot.getValue(Estimation.class);
-                Log.d("address",estimation.getAddress());
-                Log.d("data",estimation.getDate());
-                Log.d("district",estimation.getDistrict());
-                Log.d("person",estimation.getPerson());
-                Log.d("pro",estimation.getProvider().get(0));
+//                Log.d("address", estimation.getAddress());
+//                Log.d("data", estimation.getDate());
+//                Log.d("district", estimation.getDistrict());
+//                Log.d("person", estimation.getPerson());
+//                Log.d("pro", estimation.getProvider().get(0));
                 provider = estimation.getProvider();
-                init();
+                if (provider.get(0).equals("")) {
+                    Toast.makeText(getContext(),"신청서입력이 안되있거나\n신청자가 없습니다..",Toast.LENGTH_LONG).show();
+                }else{
+                    next();
+                }
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
             }
-            public void init(){
-                for(int i =0; i<provider.size();i++){
+
+            public void next() {
+                for (int i = 0; i < provider.size(); i++) {
                     databaseReference.child("users").child("provider").child(provider.get(i)).child("info").addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             Info info = dataSnapshot.getValue(Info.class);
-                            adapter.addIem(new GridItem(info.getFacilities(),info.getName(),"7",info.getAddress(),R.drawable.hall2));
+                            adapter.addIem(new GridItem(info.getFacilities(), info.getName(), "7", info.getAddress(), R.drawable.hall2));
                             adapter.notifyDataSetChanged();
                         }
 
@@ -155,16 +177,14 @@ public class NotificationFragment extends Fragment {
             }
         });
 
-
-
         View view = inflater.inflate(R.layout.fragment_notification, container, false);
         gridView = (GridView) view.findViewById(R.id.gridView);
 
         adapter = new GridAdapter();
-        adapter.addIem(new GridItem("공연장","동구","3","상세주소1",R.drawable.hall2));
-        adapter.addIem(new GridItem("숙소","중구","7","상세주소2",R.drawable.home));
-        adapter.addIem(new GridItem("스터디룸","서구","5","상세주소3",R.drawable.study));
-        adapter.addIem(new GridItem("연습실","유성구","3","상세주소4",R.drawable.practice));
+//        adapter.addIem(new GridItem("공연장","동구","3","상세주소1",R.drawable.hall2));
+//        adapter.addIem(new GridItem("숙소","중구","7","상세주소2",R.drawable.home));
+//        adapter.addIem(new GridItem("스터디룸","서구","5","상세주소3",R.drawable.study));
+//        adapter.addIem(new GridItem("연습실","유성구","3","상세주소4",R.drawable.practice));
 
         gridView.setAdapter(adapter);
 

@@ -42,6 +42,9 @@ public class SignupActivity extends AppCompatActivity {
     ArrayList<City> cities;
     boolean isProviderChecked;
 
+    private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+    private DatabaseReference databaseReference = firebaseDatabase.getReference();
+
     Spinner citySpinner;
     ArrayAdapter<String> cityAdapter;
 
@@ -225,12 +228,15 @@ public class SignupActivity extends AppCompatActivity {
                                     editor.putString("email", email);
                                     if (isProviderChecked) {
                                         editor.putBoolean("place", true);
+                                    }else{
+                                        databaseReference.child("contract").child(user.getUid()).setValue(new Estimation());
                                     }
                                     editor.commit();
 
                                     CustomDialog customDialog = new CustomDialog();
                                     customDialog.getInstance(mContext, mLayoutInflater, R.layout.submit_dialog);
                                     customDialog.show("회원가입이 완료되었습니다.", "확인");
+
                                     customDialog.dialogButton1.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
