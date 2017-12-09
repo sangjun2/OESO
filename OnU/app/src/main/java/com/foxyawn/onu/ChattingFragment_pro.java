@@ -10,9 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-
 import android.support.annotation.NonNull;
-
 import android.support.v4.app.Fragment;
 import android.text.InputType;
 import android.util.Log;
@@ -31,7 +29,11 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -40,7 +42,6 @@ import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 
 import static android.app.Activity.RESULT_OK;
@@ -57,40 +58,35 @@ public class ChattingFragment_pro extends Fragment {
     private static ImageView img;
     public Context mContext;
     Estimation estimation;
+    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+    private DatabaseReference databaseReference = firebaseDatabase.getReference();
 
     public ChattingFragment_pro() {
         // Required empty public constructor
         estimation = new Estimation();
     }
 
-
-    // TODO: Rename and change types and number of parameters
     public static ChattingFragment_pro newInstance() {
         ChattingFragment_pro fragment = new ChattingFragment_pro();
         return fragment;
     }
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = getContext();
-
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode,resultCode,data);
-
-        if(resultCode != RESULT_OK)
-            return;
-
+        if(resultCode != RESULT_OK) return;
         switch(requestCode)
         {
             case PICK_FROM_ALBUM:
                 mlmageCaptureUri = data.getData();
                 Log.d("SmartWheel",mlmageCaptureUri.getPath().toString());
-
             case PICK_FROM_CAMERA:
                 Intent intent = new Intent("com.android.camera.action.CROP");
                 intent.setDataAndType(mlmageCaptureUri,"image/*");
@@ -233,22 +229,48 @@ public class ChattingFragment_pro extends Fragment {
             }
         });
         ArrayList<Item> groupList = new ArrayList<>();
-        ArrayList<String> typeList = new ArrayList<>();
-        typeList.add("공연장");
-        typeList.add("숙소");
-        typeList.add("스터디룸");
-        typeList.add("연습실");
-        typeList.add("카페");
-        typeList.add("파티룸");
-        typeList.add("회의실");
-        groupList.add(new Item("공간유형", typeList));
+        final ArrayList<String> typeList = new ArrayList<>();
+        databaseReference.child("type").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                String typeString = dataSnapshot.getKey();
+                typeList.add(typeString);
+            }
 
-        ArrayList<String> districtList = new ArrayList<>();
-        districtList.add("동구");
-        districtList.add("중구");
-        districtList.add("서구");
-        districtList.add("유성구");
-        districtList.add("대덕구");
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) { }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) { }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) { }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) { }
+        });
+
+        groupList.add(new Item("공간유형", typeList));
+        final ArrayList<String> districtList = new ArrayList<>();
+        databaseReference.child("place").child("대전광역시").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                String typeString = (String) dataSnapshot.getValue();
+                districtList.add(typeString);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) { }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) { }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) { }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) { }
+        });
         groupList.add(new Item("구", districtList));
         groupList.add(new Item("상세주소", null));
         groupList.add(new Item("최대수용인원", null));
