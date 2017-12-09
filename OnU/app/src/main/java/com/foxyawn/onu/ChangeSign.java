@@ -2,7 +2,6 @@ package com.foxyawn.onu;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -219,9 +218,8 @@ public class ChangeSign extends AppCompatActivity {
                     String pw = passwordText.getText().toString();
                     String retryPw = passwordRetryText.getText().toString();
                     if(pw.equals(retryPw)) {
-                        FirebaseAuth mAuth;
                         final String email = emailText.getText().toString();
-                        mAuth = FirebaseAuth.getInstance();
+                        FirebaseAuth mAuth = FirebaseAuth.getInstance();
                         mAuth.createUserWithEmailAndPassword(email, pw).addOnCompleteListener(ChangeSign.this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -231,32 +229,20 @@ public class ChangeSign extends AppCompatActivity {
                                 String userPassword = passwordText.getText().toString();
                                 String userTel = phoneText.getText().toString();
                                 String userName = nameText.getText().toString();
-                                Info info = new Info();
                                 Map<String, Object> userValues;
                                 Map<String, Object> childUpdates = new HashMap<String, Object>();
 
                                 if(isProviderChecked) { // provider
                                     String userPlace = citySpinner.getSelectedItem().toString() + " " + districtSpinner.getSelectedItem().toString();
-                                    newUser = new User(userEmail, userPassword, userName, userTel, userPlace, info);
+                                    newUser = new User(userEmail, userPassword, userName, userTel, userPlace, new Info());
                                     userValues = newUser.toMap();
                                     childUpdates.put("/provider/" + user.getUid(), userValues);
                                 } else { // consumer
-                                    newUser = new User(userEmail, userPassword, userName, userTel, null, info);
+                                    newUser = new User(userEmail, userPassword, userName, userTel, null, new Info());
                                     userValues = newUser.toMap();
                                     childUpdates.put("/consumer/" + user.getUid(), userValues);
                                 }
                                 mDatabase.updateChildren(childUpdates);
-
-                                SharedPreferences preferences = getSharedPreferences("Account", MODE_PRIVATE);
-                                SharedPreferences.Editor editor = preferences.edit();
-                                editor.putString("email", email);
-                                if (isProviderChecked) {
-                                    editor.putBoolean("place", true);
-                                }else{
-                                    databaseReference.child("contract").child(user.getUid()).setValue(new Estimation());
-                                }
-                                editor.commit();
-
                                 CustomDialog customDialog = new CustomDialog();
                                 customDialog.getInstance(mContext, mLayoutInflater, R.layout.submit_dialog);
                                 customDialog.show("회원가입이 완료되었습니다.", "확인");

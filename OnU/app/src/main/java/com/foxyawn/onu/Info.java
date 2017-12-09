@@ -21,15 +21,15 @@ public class Info {
     public String time;
 
     public Info() {
-        this.address = address;
-        this.around = around;
-        this.etc = etc;
-        this.facilities = facilities;
-        this.introduce = introduce;
-        this.name = name;
-        this.notice = notice;
-        this.purpose = purpose;
-        this.time = time;
+        this.address = "";
+        this.around = "";
+        this.etc = "";
+        this.facilities = "";
+        this.introduce = "";
+        this.name = "";
+        this.notice = "";
+        this.purpose = "";
+        this.time = "";
     }
 
     @Exclude
