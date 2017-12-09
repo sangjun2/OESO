@@ -8,15 +8,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
-/**
- * Created by Sangjun on 2017-09-18.
- */
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class SettingListViewAdapter extends BaseAdapter {
 
     private String[] list;
     private SharedPreferences preferences;
+    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+    private DatabaseReference databaseReference = firebaseDatabase.getReference();
 
     public SettingListViewAdapter(SharedPreferences preferences, String[] list) {
         this.preferences = preferences;
@@ -58,8 +63,26 @@ public class SettingListViewAdapter extends BaseAdapter {
 
                 TextView settingText = (TextView) convertView.findViewById(R.id.setting_text);
                 settingText.setText(this.list[position - 1]);
-
-                if(this.list[position - 1].equals("로그아웃")) {
+                if(this.list[position-1].equals("이용 내역")){
+                    convertView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Toast.makeText(context,"이용내역",Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+                else if(this.list[position-1].equals("개인정보 변경")) {
+                    convertView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Toast.makeText(context,"개인정보 변경",Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(context,ChangeSign.class);
+                            intent.putExtra("type", preferences.getString("type", ""));
+                            context.startActivity(intent);
+                        }
+                    });
+                }
+                else if(this.list[position - 1].equals("로그아웃")) {
                     convertView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

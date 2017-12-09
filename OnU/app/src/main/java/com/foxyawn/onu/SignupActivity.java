@@ -1,7 +1,6 @@
 package com.foxyawn.onu;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -240,8 +239,6 @@ public class SignupActivity extends AppCompatActivity {
                                     customDialog.dialogButton1.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
-                                            Intent intent = new Intent(SignupActivity.this, MainActivity.class);
-                                            startActivity(intent);
                                             finish();
                                         }
                                     });
