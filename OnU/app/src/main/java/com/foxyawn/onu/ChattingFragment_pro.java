@@ -21,12 +21,14 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -47,8 +49,14 @@ import static android.app.Activity.RESULT_OK;
 
 public class ChattingFragment_pro extends Fragment {
 
+
+    private StorageReference mStorageRef;
+    private static final int PICK_FROM_CAMERA = 0;
+    private static final int PICK_FROM_ALBUM = 1;
+    private static final int CROP_FROM_IMAGE = 2;
+    private static Uri mlmageCaptureUri;
+    private static ImageView img;
     public Context mContext;
-    Info info;
     Estimation estimation;
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
@@ -56,7 +64,7 @@ public class ChattingFragment_pro extends Fragment {
 
     public ChattingFragment_pro() {
         // Required empty public constructor
-        info = new Info();
+        estimation = new Estimation();
     }
 
     public static ChattingFragment_pro newInstance() {
@@ -73,10 +81,6 @@ public class ChattingFragment_pro extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode,resultCode,data);
-
-        if(resultCode != RESULT_OK)
-            return;
-
         if(resultCode != RESULT_OK) return;
         switch(requestCode)
         {
@@ -155,13 +159,65 @@ public class ChattingFragment_pro extends Fragment {
             copyFile.createNewFile();
             out=new BufferedOutputStream(new FileOutputStream(copyFile));
             bitmap.compress(Bitmap.CompressFormat.JPEG,100,out);
+
+            mContext.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,Uri.fromFile(copyFile)));
+
+            out.flush();
+            out.close();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_chatting_pro, container, false);
+        img = (ImageView) view.findViewById(R.id.imageView);
+        img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+                DialogInterface.OnClickListener cameraListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        doTakePhotoAction();
+                    }
+                };
+                DialogInterface.OnClickListener albumListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        doTakeAlbumAction();
+                    }
+                };
+                DialogInterface.OnClickListener cancleListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                };
+
+                new AlertDialog.Builder(getContext()).setTitle("업로드할 이미지 선택").setPositiveButton("앨범선택",albumListener).setNeutralButton("취소",cancleListener).setNegativeButton("사진촬영",cameraListener).show();
+
+            }
+            public void doTakePhotoAction(){
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+                String url = "tmp_" + String.valueOf(System.currentTimeMillis()) + ".jpg";
+
+                mlmageCaptureUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(),url));
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, mlmageCaptureUri);
+                startActivityForResult(intent,PICK_FROM_CAMERA);
+
+            }
+            public void doTakeAlbumAction(){
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
+                startActivityForResult(intent, PICK_FROM_ALBUM);
+            }
+
+
+        });
 
 
         ExpandableListView listView = (ExpandableListView) view.findViewById(R.id.expanded_menu);
@@ -169,17 +225,10 @@ public class ChattingFragment_pro extends Fragment {
         applyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-                DatabaseReference databaseReference = firebaseDatabase.getReference();
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-                databaseReference.child("users").child("provider").child(user.getUid()).child("info").setValue(info);
-
-                Toast.makeText(mContext, "등록되었습니다!", Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, "공간유형 : "+estimation.getPlacetype()+"\n"+"구 : "+estimation.getDistrict()+"\n"+"상세주소 : "+estimation.getAddress()+"\n인원 : "+estimation.getPerson()+"\n가격 : "+estimation.getPrice(), Toast.LENGTH_LONG).show();
             }
         });
         ArrayList<Item> groupList = new ArrayList<>();
-
         final ArrayList<String> typeList = new ArrayList<>();
         databaseReference.child("type").addChildEventListener(new ChildEventListener() {
             @Override
@@ -288,7 +337,29 @@ public class ChattingFragment_pro extends Fragment {
         public View getChildView(final int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
             View view = null;
 
-            if(groupPosition == 0) { // 이름
+            if(groupPosition == 0 || groupPosition == 1) { //공간유형 , 구
+                view = LayoutInflater.from(mContext).inflate(R.layout.normal_child_item, null);
+                final Button button = (Button) view.findViewById(R.id.normal_child_item);
+
+                button.setText(list.get(groupPosition).getChildList().get(childPosition));
+                button.setOnClickListener(new View.OnClickListener() {
+                    @SuppressLint("ResourceAsColor")
+                    @Override
+                    public void onClick(View v) {
+                        if (groupPosition == 0){
+                            estimation.setPlacetype(button.getText().toString());
+                            button.setBackgroundColor(R.color.selected);
+//                            Log.d("first",estimation.getPlacetype());
+                        }
+                        else{
+                            estimation.setDistrict(button.getText().toString());
+                            button.setBackgroundColor(R.color.selected);
+//                            Log.d("second",estimation.getDistrict());
+                        }
+                    }
+                });
+
+            } else if(groupPosition == 2) { // 상세주소
                 view = LayoutInflater.from(mContext).inflate(R.layout.number_child_item, null);
                 final EditText editText = (EditText) view.findViewById(R.id.number_child_item);
                 editText.setInputType(InputType.TYPE_CLASS_TEXT);
@@ -297,111 +368,46 @@ public class ChattingFragment_pro extends Fragment {
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        info.setName(editText.getText().toString());
+                        estimation.setAddress(editText.getText().toString());
 //                        Log.d("third",estimation.getNumber());
                     }
                 });
-            }else if(groupPosition == 1) { // 공간유형
+            } else if(groupPosition == 3) { // 인원
                 view = LayoutInflater.from(mContext).inflate(R.layout.number_child_item, null);
                 final EditText editText = (EditText) view.findViewById(R.id.number_child_item);
-                editText.setInputType(InputType.TYPE_CLASS_TEXT);
+                editText.setInputType(InputType.TYPE_CLASS_NUMBER);
 
                 final Button button = (Button) view.findViewById(R.id.number_child_bt);
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                       info.setPurpose(editText.getText().toString());
-//                        Log.d("third",estimation.getNumber());
-                    }
-                });
-            }else if(groupPosition == 2) { // 소개
-                view = LayoutInflater.from(mContext).inflate(R.layout.number_child_item, null);
-                final EditText editText = (EditText) view.findViewById(R.id.number_child_item);
-                editText.setInputType(InputType.TYPE_CLASS_TEXT);
-
-                final Button button = (Button) view.findViewById(R.id.number_child_bt);
-                button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        info.setIntroduce(editText.getText().toString());
-//                        Log.d("third",estimation.getNumber());
-                    }
-                });
-            } else if(groupPosition == 3) { // 주소
-                view = LayoutInflater.from(mContext).inflate(R.layout.number_child_item, null);
-                final EditText editText = (EditText) view.findViewById(R.id.number_child_item);
-                editText.setInputType(InputType.TYPE_CLASS_TEXT);
-
-                final Button button = (Button) view.findViewById(R.id.number_child_bt);
-                button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        info.setAddress(editText.getText().toString());
+                        estimation.setPerson(editText.getText().toString());
 //                        Log.d("fourth",estimation.getDate());
                     }
                 });
-            }else if(groupPosition == 4) { // 이용가능시간
+            }else if(groupPosition == 4) { // 날짜
                 view = LayoutInflater.from(mContext).inflate(R.layout.number_child_item, null);
                 final EditText editText = (EditText) view.findViewById(R.id.number_child_item);
-                editText.setInputType(InputType.TYPE_CLASS_TEXT);
+                editText.setInputType(InputType.TYPE_CLASS_DATETIME);
 
                 final Button button = (Button) view.findViewById(R.id.number_child_bt);
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        info.setTime(editText.getText().toString());
+                        estimation.setDate(editText.getText().toString());
 //                        Log.d("fourth",estimation.getDate());
                     }
                 });
-            }else if(groupPosition == 5) { // 내부시설
+            }else if(groupPosition == 5) { // 가격
                 view = LayoutInflater.from(mContext).inflate(R.layout.number_child_item, null);
                 final EditText editText = (EditText) view.findViewById(R.id.number_child_item);
-                editText.setInputType(InputType.TYPE_CLASS_TEXT);
+                editText.setInputType(InputType.TYPE_CLASS_NUMBER);
 
                 final Button button = (Button) view.findViewById(R.id.number_child_bt);
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        info.setFacilities(editText.getText().toString());
-//                        Log.d("five",estimation.getDate());
-                    }
-                });
-            }else if(groupPosition == 6) { // 주변시설
-                view = LayoutInflater.from(mContext).inflate(R.layout.number_child_item, null);
-                final EditText editText = (EditText) view.findViewById(R.id.number_child_item);
-                editText.setInputType(InputType.TYPE_CLASS_TEXT);
-
-                final Button button = (Button) view.findViewById(R.id.number_child_bt);
-                button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        info.setAround(editText.getText().toString());
-//                        Log.d("five",estimation.getDate());
-                    }
-                });
-            }else if(groupPosition == 7) { // 주의사항
-                view = LayoutInflater.from(mContext).inflate(R.layout.number_child_item, null);
-                final EditText editText = (EditText) view.findViewById(R.id.number_child_item);
-                editText.setInputType(InputType.TYPE_CLASS_TEXT);
-
-                final Button button = (Button) view.findViewById(R.id.number_child_bt);
-                button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        info.setNotice(editText.getText().toString());
-//                        Log.d("five",estimation.getDate());
-                    }
-                });
-            }else if(groupPosition == 8) { // 기타
-                view = LayoutInflater.from(mContext).inflate(R.layout.number_child_item, null);
-                final EditText editText = (EditText) view.findViewById(R.id.number_child_item);
-                editText.setInputType(InputType.TYPE_CLASS_TEXT);
-
-                final Button button = (Button) view.findViewById(R.id.number_child_bt);
-                button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        info.setEtc(editText.getText().toString());
+                        estimation.setPrice(editText.getText().toString());
 //                        Log.d("five",estimation.getDate());
                     }
                 });
