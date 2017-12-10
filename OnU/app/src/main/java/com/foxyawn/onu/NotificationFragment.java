@@ -22,7 +22,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class NotificationFragment extends Fragment {
@@ -61,23 +60,12 @@ public class NotificationFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        String company = data.getStringExtra("company");
-        String name = data.getStringExtra("name");
-        String price = data.getStringExtra("price");
-        int p = Integer.parseInt(price);
-        DecimalFormat commas = new DecimalFormat("#,###");
-        price = (String)commas.format(p);
-        String comment = data.getStringExtra("comment");
-        adapter.addIem(new GridItem(company, name, price, comment, R.drawable.aoa));
-        adapter.notifyDataSetChanged();
     }
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    private String mParam1;
-    private String mParam2;
+
 
     private OnFragmentInteractionListener mListener;
 
@@ -96,33 +84,8 @@ public class NotificationFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
         mContext = this.getActivity();
-
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                GridItem item = (GridItem) adapter.getItem(position);
-                Toast.makeText(mContext,"주소 : "+item.getAddress()+"\n구 : "+item.getDistrict(),Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-    class Stringvalue{
-        String yet;
-        public Stringvalue(String yet){
-            this.yet = yet;
-        }
-
-        public String getYet() {
-            return yet;
-        }
-
-        public void setYet(String yet) {
-            this.yet = yet;
-        }
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -131,16 +94,19 @@ public class NotificationFragment extends Fragment {
 
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-
-
         databaseReference.child("contract").child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Estimation estimation = dataSnapshot.getValue(Estimation.class);
+//                Log.d("address", estimation.getAddress());
+//                Log.d("data", estimation.getDate());
+//                Log.d("district", estimation.getDistrict());
+//                Log.d("person", estimation.getPerson());
+//                Log.d("pro", estimation.getProvider().get(0));
                 provider = estimation.getProvider();
                 if (provider.get(0).equals("")) {
                     Toast.makeText(getContext(),"신청서입력이 안되있거나\n신청자가 없습니다..",Toast.LENGTH_LONG).show();
-                } else {
+                }else{
                     next();
                 }
             }
@@ -219,5 +185,4 @@ public class NotificationFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Uri uri);
     }
-
 }

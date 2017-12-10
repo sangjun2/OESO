@@ -32,9 +32,6 @@
         <activity
             android:name=".SignupActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".RegisterPlaceActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".ChangeSign"></activity>
     </application>
 
