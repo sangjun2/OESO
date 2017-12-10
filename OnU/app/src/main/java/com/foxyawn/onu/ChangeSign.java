@@ -71,10 +71,10 @@ public class ChangeSign extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         TextView toolbarTitle = (TextView) findViewById(R.id.toolbar_text);
-        toolbarTitle.setText("회원가입");
+        toolbarTitle.setText("개인정보 변경");
 
         Button toolbarButton = (Button) findViewById(R.id.toolbar_button);
-        toolbarButton.setText("취소");
+        toolbarButton.setText("돌아가기");
         toolbarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -234,11 +234,11 @@ public class ChangeSign extends AppCompatActivity {
 
                                 if(isProviderChecked) { // provider
                                     String userPlace = citySpinner.getSelectedItem().toString() + " " + districtSpinner.getSelectedItem().toString();
-                                    newUser = new User(userEmail, userPassword, userName, userTel, userPlace, new Info());
+                                    newUser = new User(userEmail, userPassword, userName, userTel, userPlace, currentUser.getInfo());
                                     userValues = newUser.toMap();
                                     childUpdates.put("/provider/" + user.getUid(), userValues);
                                 } else { // consumer
-                                    newUser = new User(userEmail, userPassword, userName, userTel, null, new Info());
+                                    newUser = new User(userEmail, userPassword, userName, userTel, null, currentUser.getInfo());
                                     userValues = newUser.toMap();
                                     childUpdates.put("/consumer/" + user.getUid(), userValues);
                                 }

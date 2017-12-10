@@ -22,7 +22,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class NotificationFragment extends Fragment {
@@ -119,11 +118,12 @@ public class NotificationFragment extends Fragment {
 
             public void next() {
                 for (int i = 0; i < provider.size(); i++) {
+                    final int index = i;
                     databaseReference.child("users").child("provider").child(provider.get(i)).child("info").addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             Info info = dataSnapshot.getValue(Info.class);
-                            adapter.addIem(new GridItem(info.getFacilities(), info.getName(), "7", info.getAddress(), R.drawable.hall2));
+                            adapter.addIem(new GridItem(info.getFacilities(), info.getName(), "7", info.getAddress(), R.drawable.hall2, provider.get(index)));
                             adapter.notifyDataSetChanged();
                         }
 
@@ -155,8 +155,12 @@ public class NotificationFragment extends Fragment {
                         "선택 : "+item.getPlaceType()+
                                 "\n장소 : "+item.getDistrict()+
                                 "\n수용인원 : "+ item.getPerson()+
-                                "\n상세주소 : "+ item.getAddress()
+                                "\n상세주소 : "+ item.getAddress()+
+                                "\n제공자UID : "+ item.getProviderUid()
                         ,Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(mContext, PictureView.class);
+                intent.putExtra("providerUid",item.getProviderUid());
+                startActivity(intent);
             }
         });
 
