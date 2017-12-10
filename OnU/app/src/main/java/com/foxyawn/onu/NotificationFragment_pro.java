@@ -43,6 +43,7 @@ import static android.app.Activity.RESULT_OK;
 
 public class NotificationFragment_pro extends Fragment {
 
+
     private StorageReference mStorageRef;
     private static final int PICK_FROM_ALBUM = 1;
     private static final int CROP_FROM_IMAGE = 2;

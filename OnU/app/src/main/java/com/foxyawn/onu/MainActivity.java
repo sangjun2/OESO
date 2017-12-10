@@ -20,9 +20,6 @@ import com.google.firebase.storage.StorageReference;
 
 
 public class MainActivity extends AppCompatActivity implements MainFragment_pro.OnFragmentInteractionListener,ChattingFragment.OnFragmentInteractionListener, NotificationFragment.OnFragmentInteractionListener, SettingFragment.OnFragmentInteractionListener {
-    private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthListener;
-    private DatabaseReference mDatabase;
     FirebaseUser user;
     String type;
 
@@ -87,7 +84,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment_pro.
 
         SharedPreferences preferences = getSharedPreferences("Account", MODE_PRIVATE);
         String email = preferences.getString("email", null);
-        mDatabase = FirebaseDatabase.getInstance().getReference();
         user = FirebaseAuth.getInstance().getCurrentUser();
 
         if(email == null) {

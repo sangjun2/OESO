@@ -32,8 +32,16 @@
         <activity
             android:name=".SignupActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".RegisterPlaceActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".ChangeSign" />
-        <activity android:name=".PictureView"></activity>
+      <activity android:name=".PictureView"></activity>
+        <service
+            android:name=".MyService"
+            android:enabled="true"
+            android:exported="true"></service>
+        
     </application>
 
 </manifest>
