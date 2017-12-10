@@ -101,6 +101,14 @@ public class NotificationFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         mContext = this.getActivity();
+
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                GridItem item = (GridItem) adapter.getItem(position);
+                Toast.makeText(mContext,"주소 : "+item.getAddress()+"\n구 : "+item.getDistrict(),Toast.LENGTH_LONG).show();
+            }
+        });
     }
     class Stringvalue{
         String yet;
@@ -129,15 +137,10 @@ public class NotificationFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Estimation estimation = dataSnapshot.getValue(Estimation.class);
-//                Log.d("address", estimation.getAddress());
-//                Log.d("data", estimation.getDate());
-//                Log.d("district", estimation.getDistrict());
-//                Log.d("person", estimation.getPerson());
-//                Log.d("pro", estimation.getProvider().get(0));
                 provider = estimation.getProvider();
                 if (provider.get(0).equals("")) {
                     Toast.makeText(getContext(),"신청서입력이 안되있거나\n신청자가 없습니다..",Toast.LENGTH_LONG).show();
-                }else{
+                } else {
                     next();
                 }
             }
@@ -170,10 +173,6 @@ public class NotificationFragment extends Fragment {
         gridView = (GridView) view.findViewById(R.id.gridView);
 
         adapter = new GridAdapter();
-//        adapter.addIem(new GridItem("공연장","동구","3","상세주소1",R.drawable.hall2));
-//        adapter.addIem(new GridItem("숙소","중구","7","상세주소2",R.drawable.home));
-//        adapter.addIem(new GridItem("스터디룸","서구","5","상세주소3",R.drawable.study));
-//        adapter.addIem(new GridItem("연습실","유성구","3","상세주소4",R.drawable.practice));
 
         gridView.setAdapter(adapter);
 
@@ -220,4 +219,5 @@ public class NotificationFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Uri uri);
     }
+
 }
