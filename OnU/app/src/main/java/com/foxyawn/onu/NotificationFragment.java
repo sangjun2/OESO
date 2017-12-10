@@ -139,6 +139,10 @@ public class NotificationFragment extends Fragment {
         gridView = (GridView) view.findViewById(R.id.gridView);
 
         adapter = new GridAdapter();
+//        adapter.addIem(new GridItem("공연장","동구","3","상세주소1",R.drawable.hall2));
+//        adapter.addIem(new GridItem("숙소","중구","7","상세주소2",R.drawable.home));
+//        adapter.addIem(new GridItem("스터디룸","서구","5","상세주소3",R.drawable.study));
+//        adapter.addIem(new GridItem("연습실","유성구","3","상세주소4",R.drawable.practice));
 
         gridView.setAdapter(adapter);
 
