@@ -1,6 +1,8 @@
 package com.foxyawn.onu;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.view.LayoutInflater;
@@ -63,11 +65,30 @@ public class SettingListViewAdapter extends BaseAdapter {
 
                 TextView settingText = (TextView) convertView.findViewById(R.id.setting_text);
                 settingText.setText(this.list[position - 1]);
-                if(this.list[position-1].equals("이용 내역")){
+                if(this.list[position-1].equals("푸시알림 설정")){
                     convertView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Toast.makeText(context,"이용내역",Toast.LENGTH_LONG).show();
+                            AlertDialog.Builder alert_confirm = new AlertDialog.Builder(context);
+                            alert_confirm.setMessage("푸시알림을 받으시겠습니까?").setCancelable(false).setPositiveButton("설정", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Toast.makeText(context,"설정되었습니다.",Toast.LENGTH_LONG).show();
+                                    Toast.makeText(context,"Service 시작",Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(context,MyService.class);
+                                    context.startService(intent);
+                                }
+                            }).setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Toast.makeText(context,"취소되었습니다.",Toast.LENGTH_LONG).show();
+                                    Toast.makeText(context,"Service 끝",Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(context,MyService.class);
+                                    context.stopService(intent);
+                                }
+                            });
+                            AlertDialog alert = alert_confirm.create();
+                            alert.show();
                         }
                     });
                 }
@@ -90,8 +111,9 @@ public class SettingListViewAdapter extends BaseAdapter {
                             SharedPreferences.Editor editor = preferences.edit();
                             editor.clear();
                             editor.commit();
-
-                            Intent intent = new Intent(context, MainActivity.class);
+                            Intent intent = new Intent(context,MyService.class);
+                            context.stopService(intent);
+                            intent = new Intent(context, MainActivity.class);
                             context.startActivity(intent);
                         }
                     });

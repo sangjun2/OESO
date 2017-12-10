@@ -61,23 +61,12 @@ public class NotificationFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        String company = data.getStringExtra("company");
-        String name = data.getStringExtra("name");
-        String price = data.getStringExtra("price");
-        int p = Integer.parseInt(price);
-        DecimalFormat commas = new DecimalFormat("#,###");
-        price = (String)commas.format(p);
-        String comment = data.getStringExtra("comment");
-        adapter.addIem(new GridItem(company, name, price, comment, R.drawable.aoa));
-        adapter.notifyDataSetChanged();
     }
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    private String mParam1;
-    private String mParam2;
+
 
     private OnFragmentInteractionListener mListener;
 
@@ -96,25 +85,8 @@ public class NotificationFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
         mContext = this.getActivity();
-    }
-    class Stringvalue{
-        String yet;
-        public Stringvalue(String yet){
-            this.yet = yet;
-        }
-
-        public String getYet() {
-            return yet;
-        }
-
-        public void setYet(String yet) {
-            this.yet = yet;
-        }
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -122,8 +94,6 @@ public class NotificationFragment extends Fragment {
         // Inflate the layout for this fragment
 
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-
 
         databaseReference.child("contract").child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="setting">
-        <item >이용 내역</item>
+        <item >푸시알림 설정</item>
         <item >개인정보 변경</item>
         <item >로그아웃</item>
     </string-array>

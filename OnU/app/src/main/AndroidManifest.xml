@@ -33,7 +33,12 @@
         <activity
             android:name=".RegisterPlaceActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ChangeSign"></activity>
+        <activity android:name=".ChangeSign" />
+
+        <service
+            android:name=".MyService"
+            android:enabled="true"
+            android:exported="true"></service>
     </application>
 
 </manifest>
