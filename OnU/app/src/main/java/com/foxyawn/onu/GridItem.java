@@ -6,17 +6,27 @@ public class GridItem {
     String person;
     String address;
     int resId;
+    String providerUid;
 
-    public GridItem(String placeType, String district, String person, String address, int resId){
+    public GridItem(String placeType, String district, String person, String address, int resId, String providerUid){
         this.placeType = placeType;
         this.district=district;
         this.person=person;
         this.address=address;
         this.resId= resId;
+        this.providerUid=providerUid;
     }
 
     public void setResId(int resId) {
         this.resId = resId;
+    }
+
+    public String getProviderUid() {
+        return providerUid;
+    }
+
+    public void setProviderUid(String providerUid) {
+        this.providerUid = providerUid;
     }
 
     public void setAddress(String address) {
