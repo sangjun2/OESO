@@ -9,6 +9,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.TransitionDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -21,10 +22,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.CookieManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.target.SquaringDrawable;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,6 +38,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
@@ -50,6 +57,12 @@ public class NotificationFragment_pro extends Fragment {
     private static Uri mlmageCaptureUri;
     private static ImageView img,img1, img2,img3,img4;
     public Context mContext;
+    FirebaseUser user;
+    StorageReference uidfolder;
+    StorageReference imagefile1;
+    StorageReference imagefile2;
+    StorageReference imagefile3;
+    StorageReference imagefile4;
 
     public NotificationFragment_pro() {
         // Required empty public constructor
@@ -142,17 +155,72 @@ public class NotificationFragment_pro extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
+
+
+        mStorageRef = FirebaseStorage.getInstance().getReference();
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        uidfolder = mStorageRef.child(user.getUid());
+
         View view = inflater.inflate(R.layout.fragment_notification_pro, container, false);
+
         img1 = (ImageView) view.findViewById(R.id.imageView1);
         img2 = (ImageView) view.findViewById(R.id.imageView2);
         img3 = (ImageView) view.findViewById(R.id.imageView3);
         img4 = (ImageView) view.findViewById(R.id.imageView4);
+
+        imagefile1 = uidfolder.child("image1");
+        imagefile2 = uidfolder.child("image2");
+        imagefile3 = uidfolder.child("image3");
+        imagefile4 = uidfolder.child("image4");
+        imagefile1.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Glide.with(getContext()).using(new FirebaseImageLoader()).load(imagefile1).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(img1);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
+        imagefile2.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Glide.with(getContext()).using(new FirebaseImageLoader()).load(imagefile2).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(img2);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
+        imagefile3.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Glide.with(getContext()).using(new FirebaseImageLoader()).load(imagefile3).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(img3);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
+        imagefile4.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Glide.with(getContext()).using(new FirebaseImageLoader()).load(imagefile4).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(img4);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
         Button button = (Button) view.findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                user.getUid();
                 img1.setDrawingCacheEnabled(true);
                 img1.buildDrawingCache();
                 img2.setDrawingCacheEnabled(true);
@@ -168,91 +236,96 @@ public class NotificationFragment_pro extends Fragment {
                 Drawable temp3 = img3.getDrawable();
                 Drawable temp4 = img4.getDrawable();
                 Bitmap noBitmap = ((BitmapDrawable)temp).getBitmap();
-                Bitmap Bitmap1 = ((BitmapDrawable)temp1).getBitmap();
-                Bitmap Bitmap2 = ((BitmapDrawable)temp2).getBitmap();
-                Bitmap Bitmap3 = ((BitmapDrawable)temp3).getBitmap();
-                Bitmap Bitmap4 = ((BitmapDrawable)temp4).getBitmap();
 
-                mStorageRef = FirebaseStorage.getInstance().getReference();
-
-                StorageReference uidfolder = mStorageRef.child(user.getUid());
-                StorageReference imagefile1 = uidfolder.child("image1");
-                StorageReference imagefile2 = uidfolder.child("image2");
-                StorageReference imagefile3 = uidfolder.child("image3");
-                StorageReference imagefile4 = uidfolder.child("image4");
                 ByteArrayOutputStream baos;
                 UploadTask uploadTask;
                 byte[] photodata;
-                if(noBitmap != Bitmap1){
-                    baos = new ByteArrayOutputStream();
-                    Bitmap1.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                    photodata = baos.toByteArray();
-                    uploadTask = imagefile1.putBytes(photodata);
-                    uploadTask.addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
+                if(!(temp1 instanceof SquaringDrawable)){
+                    Bitmap Bitmap1 = ((BitmapDrawable)temp1).getBitmap();
+                    if(noBitmap != Bitmap1){
+                        baos = new ByteArrayOutputStream();
+                        Bitmap1.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                        photodata = baos.toByteArray();
+                        uploadTask = imagefile1.putBytes(photodata);
+                        uploadTask.addOnFailureListener(new OnFailureListener() {
+                            public void onFailure(@NonNull Exception e) {
 //                        Toast.makeText(getContext(),"실패",Toast.LENGTH_LONG).show();
-                        }
-                    }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            }
+                        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 //                        Toast.makeText(getContext(),"성공",Toast.LENGTH_LONG).show();
-                        }
-                    });
+                            }
+                        });
+                    }
                 }
-                if(noBitmap != Bitmap2){
-                    baos = new ByteArrayOutputStream();
-                    Bitmap2.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                    photodata = baos.toByteArray();
-                    uploadTask = imagefile2.putBytes(photodata);
-                    uploadTask.addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
+                if(!(temp2 instanceof SquaringDrawable)){
+                    Bitmap Bitmap2 = ((BitmapDrawable)temp2).getBitmap();
+                    if(noBitmap != Bitmap2){
+                        baos = new ByteArrayOutputStream();
+                        Bitmap2.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                        photodata = baos.toByteArray();
+                        uploadTask = imagefile2.putBytes(photodata);
+                        uploadTask.addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
 //                        Toast.makeText(getContext(),"실패",Toast.LENGTH_LONG).show();
-                        }
-                    }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            }
+                        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 //                        Toast.makeText(getContext(),"성공",Toast.LENGTH_LONG).show();
-                        }
-                    });
+                            }
+                        });
+                    }
                 }
-                if(noBitmap != Bitmap3){
-                    baos = new ByteArrayOutputStream();
-                    Bitmap3.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                    photodata = baos.toByteArray();
-                    uploadTask = imagefile3.putBytes(photodata);
-                    uploadTask.addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
+                if(!(temp3 instanceof SquaringDrawable)){
+                    Bitmap Bitmap3 = ((BitmapDrawable)temp3).getBitmap();
+
+                    if(noBitmap != Bitmap3){
+                        baos = new ByteArrayOutputStream();
+                        Bitmap3.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                        photodata = baos.toByteArray();
+                        uploadTask = imagefile3.putBytes(photodata);
+                        uploadTask.addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
 //                        Toast.makeText(getContext(),"실패",Toast.LENGTH_LONG).show();
-                        }
-                    }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            }
+                        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 //                        Toast.makeText(getContext(),"성공",Toast.LENGTH_LONG).show();
-                        }
-                    });
+                            }
+                        });
+                    }
                 }
-                if(noBitmap != Bitmap4){
-                    baos = new ByteArrayOutputStream();
-                    Bitmap4.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                    photodata = baos.toByteArray();
-                    uploadTask = imagefile4.putBytes(photodata);
-                    uploadTask.addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
+                if(!(temp1 instanceof SquaringDrawable)){
+                    Bitmap Bitmap4 = ((BitmapDrawable)temp4).getBitmap();
+
+                    if(noBitmap != Bitmap4){
+                        baos = new ByteArrayOutputStream();
+                        Bitmap4.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                        photodata = baos.toByteArray();
+                        uploadTask = imagefile4.putBytes(photodata);
+                        uploadTask.addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
 //                        Toast.makeText(getContext(),"실패",Toast.LENGTH_LONG).show();
-                        }
-                    }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            }
+                        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 //                        Toast.makeText(getContext(),"성공",Toast.LENGTH_LONG).show();
-                        }
-                    });
+                            }
+                        });
+                    }
                 }
+
+
                 Toast.makeText(mContext,"등록되었습니다!",Toast.LENGTH_SHORT).show();
             }
+
         });
 
         View.OnClickListener imgClick = new View.OnClickListener() {
