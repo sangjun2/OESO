@@ -57,10 +57,10 @@ public class NotificationFragment extends Fragment {
         @Override
         public View getView(int position, View convertView, ViewGroup viewGroup) {
             GridItem item = items.get(position);
-            view.setPlaceType(item.getPlaceType());
-            view.setDistrict(item.getDistrict());
-            view.setPerson(item.getPerson());
-            view.setaddress(item.getAddress());
+            view.setName(item.getName());
+            view.setAddress(item.getAddress());
+            view.setIntroduce(item.getIntroduce());
+            view.setPrice(item.getPrice());
             int numColumns = gridView.getNumColumns();
             int rowIndex = position/numColumns;
             int columnIndex = position%numColumns;
@@ -110,11 +110,6 @@ public class NotificationFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Estimation estimation = dataSnapshot.getValue(Estimation.class);
-//                Log.d("address", estimation.getAddress());
-//                Log.d("data", estimation.getDate());
-//                Log.d("district", estimation.getDistrict());
-//                Log.d("person", estimation.getPerson());
-//                Log.d("pro", estimation.getProvider().get(0));
                 provider = estimation.getProvider();
                 if (provider.get(0).equals("")) {
                     Toast.makeText(getContext(),"신청서입력이 안되있거나\n신청자가 없습니다..",Toast.LENGTH_LONG).show();
@@ -141,7 +136,6 @@ public class NotificationFragment extends Fragment {
                             imagefile1.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                 @Override
                                 public void onSuccess(Uri uri) {
-//                                    ((GridItem)gridView.getItemAtPosition(index)).setResId(uri);
                                     ImageView imgv = ((GridItem)adapter.getItem(index)).getSonImageView();
                                     Glide.with(getContext()).using(new FirebaseImageLoader()).load(imagefile1).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(imgv);
                                 }
@@ -151,7 +145,7 @@ public class NotificationFragment extends Fragment {
 
                                 }
                             });
-                            adapter.addIem(new GridItem(info.getFacilities(), info.getName(), "7", info.getAddress(),R.drawable.noimage , provider.get(index)));
+                            adapter.addIem(new GridItem(info.getName(), info.getAddress(), info.getIntroduce(),info.getPrice(),R.drawable.noimage , provider.get(index),info));
                             adapter.notifyDataSetChanged();
 
                         }
@@ -169,11 +163,6 @@ public class NotificationFragment extends Fragment {
         gridView = (GridView) view.findViewById(R.id.gridView);
 
         adapter = new GridAdapter();
-//        adapter.addIem(new GridItem("공연장","동구","3","상세주소1",R.drawable.hall2));
-//        adapter.addIem(new GridItem("숙소","중구","7","상세주소2",R.drawable.home));
-//        adapter.addIem(new GridItem("스터디룸","서구","5","상세주소3",R.drawable.study));
-//        adapter.addIem(new GridItem("연습실","유성구","3","상세주소4",R.drawable.practice));
-
         gridView.setAdapter(adapter);
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -181,12 +170,13 @@ public class NotificationFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 GridItem item = (GridItem) adapter.getItem(position);
                 Toast.makeText(mContext,
-                        "선택 : "+item.getPlaceType()+
-                                "\n장소 : "+item.getDistrict()+
-                                "\n수용인원 : "+ item.getPerson()+
-                                "\n상세주소 : "+ item.getAddress()+
-                                "\n제공자UID : "+ item.getProviderUid()
-                        ,Toast.LENGTH_LONG).show();
+                                "공간유형 : " + item.getInfo().getPurpose() +
+                                "\n이용가능 시간 : " + item.getInfo().getTime() +
+                                "\n내부 시설 : " + item.getInfo().getFacilities() +
+                                "\n주변 시설 : " + item.getInfo().getAround() +
+                                "\n주의 사항 : " + item.getInfo().getNotice() +
+                                "\n기타 : " + item.getInfo().getEtc()
+                                , Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(mContext, PictureView.class);
                 intent.putExtra("providerUid",item.getProviderUid());
                 startActivity(intent);
@@ -199,9 +189,9 @@ public class NotificationFragment extends Fragment {
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+        mListener.onFragmentInteraction(uri);
     }
+}
 
     @Override
     public void onAttach(Context context) {

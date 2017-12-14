@@ -108,11 +108,11 @@ public class ChattingFragment_pro extends Fragment {
             public void onCancelled(DatabaseError databaseError) { }
         });
         groupList.add(new Item("이름", null));
-        Item item = new Item("공간유형", typeList);
-        groupList.add(item);
+        groupList.add(new Item("공간유형", typeList));
         groupList.add(new Item("소개", null));
         groupList.add(new Item("주소", null));
         groupList.add(new Item("이용가능 시간", null));
+        groupList.add(new Item("시간당 가격",null));
         groupList.add(new Item("내부시설", null));
         groupList.add(new Item("주변시설", null));
         groupList.add(new Item("주의사항", null));
@@ -257,7 +257,20 @@ public class ChattingFragment_pro extends Fragment {
 //                        Log.d("five",estimation.getDate());
                     }
                 });
-            }else if(groupPosition == 6) { // 주변시설
+            }else if(groupPosition == 6) { // 시간당가격
+                view = LayoutInflater.from(mContext).inflate(R.layout.number_child_item, null);
+                final EditText editText = (EditText) view.findViewById(R.id.number_child_item);
+                editText.setInputType(InputType.TYPE_CLASS_TEXT);
+
+                final Button button = (Button) view.findViewById(R.id.number_child_bt);
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        info.setPrice(editText.getText().toString());
+//                        Log.d("five",estimation.getDate());
+                    }
+                });
+            }else if(groupPosition == 7) { // 주변시설
                 view = LayoutInflater.from(mContext).inflate(R.layout.number_child_item, null);
                 final EditText editText = (EditText) view.findViewById(R.id.number_child_item);
                 editText.setInputType(InputType.TYPE_CLASS_TEXT);
@@ -270,7 +283,7 @@ public class ChattingFragment_pro extends Fragment {
 //                        Log.d("five",estimation.getDate());
                     }
                 });
-            }else if(groupPosition == 7) { // 주의사항
+            }else if(groupPosition == 8) { // 주의사항
                 view = LayoutInflater.from(mContext).inflate(R.layout.number_child_item, null);
                 final EditText editText = (EditText) view.findViewById(R.id.number_child_item);
                 editText.setInputType(InputType.TYPE_CLASS_TEXT);
@@ -283,7 +296,7 @@ public class ChattingFragment_pro extends Fragment {
 //                        Log.d("five",estimation.getDate());
                     }
                 });
-            }else if(groupPosition == 8) { // 기타
+            }else if(groupPosition == 9) { // 기타
                 view = LayoutInflater.from(mContext).inflate(R.layout.number_child_item, null);
                 final EditText editText = (EditText) view.findViewById(R.id.number_child_item);
                 editText.setInputType(InputType.TYPE_CLASS_TEXT);
