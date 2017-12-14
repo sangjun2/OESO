@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,8 +13,14 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -21,6 +28,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
@@ -33,22 +42,25 @@ public class NotificationFragment extends Fragment {
 
     class GridAdapter extends BaseAdapter {
         ArrayList<GridItem> items = new ArrayList<GridItem>();
+        GridItemView view;
         @Override
         public int getCount() {return items.size();}
-        public void addIem(GridItem item){items.add(item);}
+        public void addIem(GridItem item){
+            items.add(item);
+            view = new GridItemView(mContext);
+            item.setSonImageView(view.getImageView());
+        }
         @Override
         public Object getItem(int position) {return items.get(position);}
         @Override
         public long getItemId(int position) {return position;}
         @Override
         public View getView(int position, View convertView, ViewGroup viewGroup) {
-            GridItemView view = new GridItemView(mContext);
             GridItem item = items.get(position);
             view.setPlaceType(item.getPlaceType());
             view.setDistrict(item.getDistrict());
             view.setPerson(item.getPerson());
             view.setaddress(item.getAddress());
-            view.setImage(item.getResId());
             int numColumns = gridView.getNumColumns();
             int rowIndex = position/numColumns;
             int columnIndex = position%numColumns;
@@ -115,16 +127,33 @@ public class NotificationFragment extends Fragment {
             public void onCancelled(DatabaseError databaseError) {
 
             }
-
+            int index = 0;
             public void next() {
                 for (int i = 0; i < provider.size(); i++) {
-                    final int index = i;
+                    index = i;
                     databaseReference.child("users").child("provider").child(provider.get(i)).child("info").addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            Info info = dataSnapshot.getValue(Info.class);
-                            adapter.addIem(new GridItem(info.getFacilities(), info.getName(), "7", info.getAddress(), R.drawable.hall2, provider.get(index)));
+                            final Info info = dataSnapshot.getValue(Info.class);
+                            StorageReference mStorageRef =  FirebaseStorage.getInstance().getReference();
+                            StorageReference uidfolder = mStorageRef.child(provider.get(index));
+                            final StorageReference imagefile1 = uidfolder.child("image1");
+                            imagefile1.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+//                                    ((GridItem)gridView.getItemAtPosition(index)).setResId(uri);
+                                    ImageView imgv = ((GridItem)adapter.getItem(index)).getSonImageView();
+                                    Glide.with(getContext()).using(new FirebaseImageLoader()).load(imagefile1).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(imgv);
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+
+                                }
+                            });
+                            adapter.addIem(new GridItem(info.getFacilities(), info.getName(), "7", info.getAddress(),R.drawable.noimage , provider.get(index)));
                             adapter.notifyDataSetChanged();
+
                         }
 
                         @Override
