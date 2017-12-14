@@ -51,10 +51,8 @@ public class MyService extends Service {
 
         if(type.equals("consumer")){
             databaseReference.child("contract").child(user.getUid()).child("provider").addValueEventListener(new ValueEventListener() {
-                boolean bl = false;
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    if (bl == true) {
 
                         Intent intent = new Intent(MyService.this, MainActivity.class);
                         PendingIntent pendingIntent = PendingIntent.getActivity(MyService.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -75,8 +73,6 @@ public class MyService extends Service {
                         Notifi.flags = Notification.FLAG_AUTO_CANCEL;
                         Notifi_M.notify(777, Notifi);
                     }
-                    bl = true;
-                }
 
 
                 @Override

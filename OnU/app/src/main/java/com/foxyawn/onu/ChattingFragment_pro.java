@@ -247,20 +247,7 @@ public class ChattingFragment_pro extends Fragment {
 //                        Log.d("fourth",estimation.getDate());
                     }
                 });
-            }else if(groupPosition == 5) { // 내부시설
-                view = LayoutInflater.from(mContext).inflate(R.layout.number_child_item, null);
-                final EditText editText = (EditText) view.findViewById(R.id.number_child_item);
-                editText.setInputType(InputType.TYPE_CLASS_TEXT);
-
-                final Button button = (Button) view.findViewById(R.id.number_child_bt);
-                button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        info.setFacilities(editText.getText().toString());
-//                        Log.d("five",estimation.getDate());
-                    }
-                });
-            }else if(groupPosition == 6) { // 시간당가격
+            }else if(groupPosition == 5) { // 시간당가격
                 view = LayoutInflater.from(mContext).inflate(R.layout.number_child_item, null);
                 final EditText editText = (EditText) view.findViewById(R.id.number_child_item);
                 editText.setInputType(InputType.TYPE_CLASS_TEXT);
@@ -270,6 +257,19 @@ public class ChattingFragment_pro extends Fragment {
                     @Override
                     public void onClick(View v) {
                         info.setPrice(editText.getText().toString());
+//                        Log.d("five",estimation.getDate());
+                    }
+                });
+            }else if(groupPosition == 6) { // 내부시설
+                view = LayoutInflater.from(mContext).inflate(R.layout.number_child_item, null);
+                final EditText editText = (EditText) view.findViewById(R.id.number_child_item);
+                editText.setInputType(InputType.TYPE_CLASS_TEXT);
+
+                final Button button = (Button) view.findViewById(R.id.number_child_bt);
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        info.setFacilities(editText.getText().toString());
 //                        Log.d("five",estimation.getDate());
                     }
                 });
