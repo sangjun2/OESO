@@ -2,10 +2,6 @@ package com.foxyawn.onu;
 
 import java.util.ArrayList;
 
-/**
- * Created by jsb on 2017-11-26.
- */
-
 public class Item {
     public String title;
     public ArrayList<String> childList;

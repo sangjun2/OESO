@@ -102,19 +102,12 @@ public class NotificationFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         databaseReference.child("contract").child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Estimation estimation = dataSnapshot.getValue(Estimation.class);
-//                Log.d("address", estimation.getAddress());
-//                Log.d("data", estimation.getDate());
-//                Log.d("district", estimation.getDistrict());
-//                Log.d("person", estimation.getPerson());
-//                Log.d("pro", estimation.getProvider().get(0));
                 provider = estimation.getProvider();
                 if (provider.get(0).equals("")) {
                     Toast.makeText(getContext(),"신청서입력이 안되있거나\n신청자가 없습니다..",Toast.LENGTH_LONG).show();
@@ -169,10 +162,6 @@ public class NotificationFragment extends Fragment {
         gridView = (GridView) view.findViewById(R.id.gridView);
 
         adapter = new GridAdapter();
-//        adapter.addIem(new GridItem("공연장","동구","3","상세주소1",R.drawable.hall2));
-//        adapter.addIem(new GridItem("숙소","중구","7","상세주소2",R.drawable.home));
-//        adapter.addIem(new GridItem("스터디룸","서구","5","상세주소3",R.drawable.study));
-//        adapter.addIem(new GridItem("연습실","유성구","3","상세주소4",R.drawable.practice));
 
         gridView.setAdapter(adapter);
 
@@ -180,13 +169,6 @@ public class NotificationFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 GridItem item = (GridItem) adapter.getItem(position);
-                Toast.makeText(mContext,
-                        "선택 : "+item.getPlaceType()+
-                                "\n장소 : "+item.getDistrict()+
-                                "\n수용인원 : "+ item.getPerson()+
-                                "\n상세주소 : "+ item.getAddress()+
-                                "\n제공자UID : "+ item.getProviderUid()
-                        ,Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(mContext, PictureView.class);
                 intent.putExtra("providerUid",item.getProviderUid());
                 startActivity(intent);
