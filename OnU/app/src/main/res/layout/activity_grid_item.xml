@@ -24,25 +24,44 @@
 
             <TextView
                 android:id="@+id/name"
+<<<<<<< HEAD
                 android:textAlignment="center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textSize="28dp"
                 android:text="name"/>
+=======
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="24dp"
+                android:text="name"/>
+        <TextView
+            android:id="@+id/price"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:text="price"/>
+>>>>>>> 915cd8401a8a61cdf5cb871bcdcb54bfbc8c1011
 
             <TextView
                 android:id="@+id/address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+<<<<<<< HEAD
                 android:textSize="24dp"
+=======
+                android:textSize="16dp"
+>>>>>>> 915cd8401a8a61cdf5cb871bcdcb54bfbc8c1011
                 android:text="address"/>
             <TextView
                 android:id="@+id/introduce"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+<<<<<<< HEAD
                 android:textSize="22dp"
                 android:text="introduce"/>
 
@@ -53,6 +72,12 @@
             android:layout_height="wrap_content"
             android:textSize="20dp"
             android:text="price"/>
+=======
+                android:textSize="16dp"
+                android:text="introduce"/>
+
+
+>>>>>>> 915cd8401a8a61cdf5cb871bcdcb54bfbc8c1011
 
 
     </LinearLayout>

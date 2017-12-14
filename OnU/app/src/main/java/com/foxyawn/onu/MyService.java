@@ -49,52 +49,17 @@ public class MyService extends Service {
 
         if(type.equals("consumer")){
             databaseReference.child("contract").child(user.getUid()).child("provider").addValueEventListener(new ValueEventListener() {
-
+                boolean bl = false;
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    Intent intent = new Intent(MyService.this, MainActivity.class);
-                    PendingIntent pendingIntent = PendingIntent.getActivity(MyService.this, 0, intent,PendingIntent.FLAG_UPDATE_CURRENT);
+                    if (bl == true) {
 
-                    Notifi = new Notification.Builder(getApplicationContext())
-                            .setContentTitle("공급 요청")
-                            .setContentText("신청한 요청의 새로운 공급자가 생겼습니다.")
-                            .setSmallIcon(R.drawable.icon)
-                            .setTicker("알림!!!")
-                            .setContentIntent(pendingIntent)
-                            .build();
-
-                    //소리추가
-                    Notifi.defaults = Notification.DEFAULT_SOUND;
-                    //알림 소리를 한번만 내도록
-                    Notifi.flags = Notification.FLAG_ONLY_ALERT_ONCE;
-                    //확인하면 자동으로 알림이 제거 되도록
-                    Notifi.flags = Notification.FLAG_AUTO_CANCEL;
-                    Notifi_M.notify(777 , Notifi);
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-        }else{
-            databaseReference.child("contract").addChildEventListener(new ChildEventListener() {
-
-                @Override
-                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
-                }
-
-                @Override
-                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                    Estimation es = dataSnapshot.getValue(Estimation.class);
-                    if(es.getDistrict().equals("동구")){
                         Intent intent = new Intent(MyService.this, MainActivity.class);
-                        PendingIntent pendingIntent = PendingIntent.getActivity(MyService.this, 0, intent,PendingIntent.FLAG_UPDATE_CURRENT);
+                        PendingIntent pendingIntent = PendingIntent.getActivity(MyService.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
                         Notifi = new Notification.Builder(getApplicationContext())
-                                .setContentTitle("새로운 견적신청")
-                                .setContentText("주변에 새로운 견적이 신청되었습니다.")
+                                .setContentTitle("공급 요청")
+                                .setContentText("신청한 요청의 새로운 공급자가 생겼습니다.")
                                 .setSmallIcon(R.drawable.icon)
                                 .setTicker("알림!!!")
                                 .setContentIntent(pendingIntent)
@@ -106,10 +71,55 @@ public class MyService extends Service {
                         Notifi.flags = Notification.FLAG_ONLY_ALERT_ONCE;
                         //확인하면 자동으로 알림이 제거 되도록
                         Notifi.flags = Notification.FLAG_AUTO_CANCEL;
-                        Notifi_M.notify(777 , Notifi);
+                        Notifi_M.notify(777, Notifi);
                     }
+                    bl = true;
+                }
 
 
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }else{
+            databaseReference.child("contract").addChildEventListener(new ChildEventListener() {
+                boolean bl = false;
+
+
+                @Override
+                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+                }
+
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                    if (bl == true) {
+
+                        Estimation es = dataSnapshot.getValue(Estimation.class);
+                        if (es.getDistrict().equals("동구")) {
+                            Intent intent = new Intent(MyService.this, MainActivity.class);
+                            PendingIntent pendingIntent = PendingIntent.getActivity(MyService.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                            Notifi = new Notification.Builder(getApplicationContext())
+                                    .setContentTitle("새로운 견적신청")
+                                    .setContentText("주변에 새로운 견적이 신청되었습니다.")
+                                    .setSmallIcon(R.drawable.icon)
+                                    .setTicker("알림!!!")
+                                    .setContentIntent(pendingIntent)
+                                    .build();
+
+                            //소리추가
+                            Notifi.defaults = Notification.DEFAULT_SOUND;
+                            //알림 소리를 한번만 내도록
+                            Notifi.flags = Notification.FLAG_ONLY_ALERT_ONCE;
+                            //확인하면 자동으로 알림이 제거 되도록
+                            Notifi.flags = Notification.FLAG_AUTO_CANCEL;
+                            Notifi_M.notify(777, Notifi);
+                        }
+
+                    }
+                    bl = true;
                 }
 
                 @Override

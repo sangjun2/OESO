@@ -37,18 +37,19 @@ public class NotificationFragment extends Fragment {
         GridItemView view;
         @Override
         public int getCount() {return items.size();}
-        public void addIem(GridItem item){
-            items.add(item);
-            view = new GridItemView(mContext);
-            item.setSonImageView(view.getImageView());
-        }
+        public void addIem(GridItem item){items.add(item);}
         @Override
         public Object getItem(int position) {return items.get(position);}
         @Override
         public long getItemId(int position) {return position;}
         @Override
         public View getView(int position, View convertView, ViewGroup viewGroup) {
+            GridItemView view = new GridItemView(mContext);
             GridItem item = items.get(position);
+<<<<<<< HEAD
+=======
+            item.setSonImageView(view.getImageView());
+>>>>>>> 915cd8401a8a61cdf5cb871bcdcb54bfbc8c1011
             view.setName(item.getName());
             view.setAddress(item.getAddress());
             view.setIntroduce(item.getIntroduce());
@@ -96,6 +97,12 @@ public class NotificationFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
+        View view = inflater.inflate(R.layout.fragment_notification, container, false);
+        gridView = (GridView) view.findViewById(R.id.gridView);
+
+        adapter = new GridAdapter();
+        gridView.setAdapter(adapter);
+
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         databaseReference.child("contract").child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -115,7 +122,35 @@ public class NotificationFragment extends Fragment {
             public void onCancelled(DatabaseError databaseError) {
 
             }
+<<<<<<< HEAD
             int index = 0;
+=======
+            public void next() {
+                for (int i = 0; i < provider.size(); i++) {
+                    final int index = i;
+                    databaseReference.child("users").child("provider").child(provider.get(i)).child("info").addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            final Info info = dataSnapshot.getValue(Info.class);
+                            StorageReference mStorageRef =  FirebaseStorage.getInstance().getReference();
+                            StorageReference uidfolder = mStorageRef.child(provider.get(index));
+                            final StorageReference imagefile1 = uidfolder.child("image1");
+                            imagefile1.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    ImageView imgv = ((GridItem)adapter.getItem(index)).getSonImageView();
+                                    Glide.with(getContext()).using(new FirebaseImageLoader()).load(imagefile1).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(imgv);
+
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+
+                                }
+                            });
+                            adapter.addIem(new GridItem(info.getName(), info.getAddress(), info.getIntroduce(),info.getPrice(),R.drawable.noimage , provider.get(index),info));
+                            adapter.notifyDataSetChanged();
+>>>>>>> 915cd8401a8a61cdf5cb871bcdcb54bfbc8c1011
 
             public void next() {
                 databaseReference.child("users").child("provider").addChildEventListener(new ChildEventListener() {
@@ -154,25 +189,37 @@ public class NotificationFragment extends Fragment {
             }
         });
 
+<<<<<<< HEAD
         View view = inflater.inflate(R.layout.fragment_notification, container, false);
         gridView = (GridView) view.findViewById(R.id.gridView);
 
         adapter = new GridAdapter();
         gridView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+=======
+
+>>>>>>> 915cd8401a8a61cdf5cb871bcdcb54bfbc8c1011
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 GridItem item = (GridItem) adapter.getItem(position);
                 Toast.makeText(mContext,
+<<<<<<< HEAD
                         "공간유형 : " + item.getInfo().getPurpose() +
+=======
+                                "공간유형 : " + item.getInfo().getPurpose() +
+>>>>>>> 915cd8401a8a61cdf5cb871bcdcb54bfbc8c1011
                                 "\n이용가능 시간 : " + item.getInfo().getTime() +
                                 "\n내부 시설 : " + item.getInfo().getFacilities() +
                                 "\n주변 시설 : " + item.getInfo().getAround() +
                                 "\n주의 사항 : " + item.getInfo().getNotice() +
                                 "\n기타 : " + item.getInfo().getEtc()
+<<<<<<< HEAD
                         , Toast.LENGTH_SHORT).show();
+=======
+                                , Toast.LENGTH_SHORT).show();
+>>>>>>> 915cd8401a8a61cdf5cb871bcdcb54bfbc8c1011
                 Intent intent = new Intent(mContext, PictureView.class);
                 intent.putExtra("providerUid",item.getProviderUid());
                 startActivity(intent);
@@ -183,9 +230,9 @@ public class NotificationFragment extends Fragment {
 
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+        mListener.onFragmentInteraction(uri);
     }
+}
 
     @Override
     public void onAttach(Context context) {
