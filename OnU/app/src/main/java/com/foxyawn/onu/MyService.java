@@ -25,14 +25,12 @@ import java.util.ArrayList;
 
 public class MyService extends Service {
     NotificationManager Notifi_M;
-    ServiceThread thread;
+    //ServiceThread thread;
     Notification Notifi ;
 
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     DatabaseReference databaseReference = firebaseDatabase.getReference();
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    int mydistrictnum =0;
-    boolean dong = false;
     ArrayList<String> array = new ArrayList<String>();
 
 
@@ -144,18 +142,7 @@ public class MyService extends Service {
     //서비스가 종료될 때 할 작업
 
     public void onDestroy() {
-        thread.stopForever();
-        thread = null;//쓰레기 값을 만들어서 빠르게 회수하라고 null을 넣어줌.
+
     }
 
-    class myServiceHandler extends Handler {
-        @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-        @Override
-        public void handleMessage(android.os.Message msg) {
-
-
-
-
-        }
-    };
 }

@@ -50,7 +50,7 @@ public class SettingListViewAdapter extends BaseAdapter {
         final Context context = parent.getContext();
 
         if(convertView == null) {
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            final LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
             if(position == 0) {
                 convertView = inflater.inflate(R.layout.setting_profile, parent, false);
@@ -74,7 +74,6 @@ public class SettingListViewAdapter extends BaseAdapter {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     Toast.makeText(context,"설정되었습니다.",Toast.LENGTH_LONG).show();
-                                    Toast.makeText(context,"Service 시작",Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(context,MyService.class);
                                     context.startService(intent);
                                 }
@@ -82,7 +81,6 @@ public class SettingListViewAdapter extends BaseAdapter {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     Toast.makeText(context,"취소되었습니다.",Toast.LENGTH_LONG).show();
-                                    Toast.makeText(context,"Service 끝",Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(context,MyService.class);
                                     context.stopService(intent);
                                 }
