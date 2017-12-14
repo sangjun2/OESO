@@ -53,7 +53,6 @@ public class PictureView extends AppCompatActivity {
         final String providerUid = intent.getStringExtra("providerUid");
 
         databaseReference.child("users").child("provider").addChildEventListener(new ChildEventListener() {
-            @SuppressLint("MissingPermission")
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 if (dataSnapshot.getKey().equals(providerUid)) {
@@ -64,7 +63,6 @@ public class PictureView extends AppCompatActivity {
                         public void onClick(View v) {
                             Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse(tel));
                             startActivity(intent);
-
                         }
                     });
                 }

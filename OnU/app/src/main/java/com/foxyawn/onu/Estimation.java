@@ -18,7 +18,6 @@ public class Estimation {
     String email;
 
     Estimation (){
-        this.price = "";
         this.placetype = "";
         this.district = "";
         this.address = "";

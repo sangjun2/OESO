@@ -19,6 +19,7 @@ public class Info {
     public String notice;
     public String purpose;
     public String time;
+    public String price;
 
     public Info() {
         this.address = "";
@@ -30,6 +31,7 @@ public class Info {
         this.notice = "";
         this.purpose = "";
         this.time = "";
+        this.price ="";
     }
 
     @Exclude
@@ -44,7 +46,16 @@ public class Info {
         result.put("notice", notice);
         result.put("purpose", purpose);
         result.put("time", time);
+        result.put("price", price);
         return result;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
     }
 
     public String getAddress() {

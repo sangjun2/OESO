@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
-import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.RequiresApi;
 
@@ -44,11 +43,6 @@ public class MyService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
 
         Notifi_M = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-//        myServiceHandler handler = new myServiceHandler();
-
-//        thread = new ServiceThread(handler);
-//        thread.start();
 
         SharedPreferences preferences = getSharedPreferences("Account", MODE_PRIVATE);
         String type = preferences.getString("type", "");

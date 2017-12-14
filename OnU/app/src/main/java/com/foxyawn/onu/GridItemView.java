@@ -31,16 +31,16 @@ public class GridItemView extends LinearLayout {
         LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.activity_grid_item,this, true);
 
-        textView =(TextView)findViewById(R.id.company);
-        textView2 =(TextView)findViewById(R.id.name);
-        textView3 =(TextView)findViewById(R.id.price);
-        textView4 =(TextView)findViewById(R.id.comment);
+        textView =(TextView)findViewById(R.id.name);
+        textView2 =(TextView)findViewById(R.id.address);
+        textView3 =(TextView)findViewById(R.id.introduce);
+        textView4 =(TextView)findViewById(R.id.price);
         imageView = (ImageView) findViewById(R.id.imageView);
     }
-    public void setPlaceType(String placeType){textView.setText("["+placeType+"]");}
-    public void setDistrict(String district){textView2.setText(district);}
-    public void setPerson(String person){textView3.setText("수용인원 : " + person);}
-    public void setaddress(String address){textView4.setText(address);}
+    public void setName(String name){textView.setText(name);}
+    public void setAddress(String address){textView2.setText(address);}
+    public void setIntroduce(String introduce){textView3.setText(introduce);}
+    public void setPrice(String price){textView4.setText(price);}
     public void setImage(int resId){imageView.setImageResource(resId);}
     public ImageView getImageView(){return imageView;}
 }
