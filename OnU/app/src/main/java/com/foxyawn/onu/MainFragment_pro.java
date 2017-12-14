@@ -59,7 +59,7 @@ public class MainFragment_pro extends Fragment {
     }
 
     private void readContract() {
-        databaseReference.child("contract").addChildEventListener(new ChildEventListener() {  // message는 child의 이벤트를 수신합니다.
+        databaseReference.child("contract").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Estimation estimation = dataSnapshot.getValue(Estimation.class);
