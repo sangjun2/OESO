@@ -1,5 +1,6 @@
 package com.foxyawn.onu;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -199,9 +200,11 @@ public class ChattingFragment_pro extends Fragment {
                 button.setText(list.get(groupPosition).getChildList().get(childPosition));
                 button.setOnClickListener(new View.OnClickListener() {
 //                editText.setInputType(InputType.TYPE_CLASS_TEXT);
+                    @SuppressLint("ResourceAsColor")
                     @Override
                     public void onClick(View v) {
                         info.setPurpose(button.getText().toString());
+                        button.setBackgroundColor(R.color.selected);
 //                        Log.d("third",estimation.getNumber());
                     }
                 });
