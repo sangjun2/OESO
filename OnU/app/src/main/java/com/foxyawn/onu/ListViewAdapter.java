@@ -18,10 +18,6 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
-/**
- * Created by dldlw on 2017-11-26.
- */
-
 public class ListViewAdapter extends BaseAdapter {
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
