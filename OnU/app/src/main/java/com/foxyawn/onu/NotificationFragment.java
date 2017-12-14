@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,16 +13,23 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
@@ -46,10 +54,7 @@ public class NotificationFragment extends Fragment {
         public View getView(int position, View convertView, ViewGroup viewGroup) {
             GridItemView view = new GridItemView(mContext);
             GridItem item = items.get(position);
-<<<<<<< HEAD
-=======
             item.setSonImageView(view.getImageView());
->>>>>>> 915cd8401a8a61cdf5cb871bcdcb54bfbc8c1011
             view.setName(item.getName());
             view.setAddress(item.getAddress());
             view.setIntroduce(item.getIntroduce());
@@ -114,7 +119,6 @@ public class NotificationFragment extends Fragment {
                     Toast.makeText(getContext(),"신청서입력이 안되있거나\n신청자가 없습니다..",Toast.LENGTH_LONG).show();
                 }else{
                     next();
-                    adapter.notifyDataSetChanged();
                 }
             }
 
@@ -122,9 +126,6 @@ public class NotificationFragment extends Fragment {
             public void onCancelled(DatabaseError databaseError) {
 
             }
-<<<<<<< HEAD
-            int index = 0;
-=======
             public void next() {
                 for (int i = 0; i < provider.size(); i++) {
                     final int index = i;
@@ -150,89 +151,47 @@ public class NotificationFragment extends Fragment {
                             });
                             adapter.addIem(new GridItem(info.getName(), info.getAddress(), info.getIntroduce(),info.getPrice(),R.drawable.noimage , provider.get(index),info));
                             adapter.notifyDataSetChanged();
->>>>>>> 915cd8401a8a61cdf5cb871bcdcb54bfbc8c1011
 
-            public void next() {
-                databaseReference.child("users").child("provider").addChildEventListener(new ChildEventListener() {
-                    @Override
-                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                        for (int i=0;i<provider.size();i++){
-                            String a = dataSnapshot.getKey();
-                            String b = provider.get(i);
-                            if (provider.get(i).equals(dataSnapshot.getKey())){
-                                Info info = dataSnapshot.getValue(Info.class);
-                                adapter.addIem(new GridItem(info.getName(), info.getAddress(), info.getIntroduce(),info.getPrice(),R.drawable.noimage , provider.get(i), info));
-                            }
                         }
-                    }
 
-                    @Override
-                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
 
-                    }
-
-                    @Override
-                    public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                    }
-
-                    @Override
-                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
+                        }
+                    });
+                }
             }
         });
 
-<<<<<<< HEAD
-        View view = inflater.inflate(R.layout.fragment_notification, container, false);
-        gridView = (GridView) view.findViewById(R.id.gridView);
 
-        adapter = new GridAdapter();
-        gridView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
-=======
-
->>>>>>> 915cd8401a8a61cdf5cb871bcdcb54bfbc8c1011
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 GridItem item = (GridItem) adapter.getItem(position);
                 Toast.makeText(mContext,
-<<<<<<< HEAD
                         "공간유형 : " + item.getInfo().getPurpose() +
-=======
-                                "공간유형 : " + item.getInfo().getPurpose() +
->>>>>>> 915cd8401a8a61cdf5cb871bcdcb54bfbc8c1011
                                 "\n이용가능 시간 : " + item.getInfo().getTime() +
                                 "\n내부 시설 : " + item.getInfo().getFacilities() +
                                 "\n주변 시설 : " + item.getInfo().getAround() +
                                 "\n주의 사항 : " + item.getInfo().getNotice() +
                                 "\n기타 : " + item.getInfo().getEtc()
-<<<<<<< HEAD
                         , Toast.LENGTH_SHORT).show();
-=======
-                                , Toast.LENGTH_SHORT).show();
->>>>>>> 915cd8401a8a61cdf5cb871bcdcb54bfbc8c1011
                 Intent intent = new Intent(mContext, PictureView.class);
                 intent.putExtra("providerUid",item.getProviderUid());
                 startActivity(intent);
             }
         });
+
         return view;
     }
 
+    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
-        mListener.onFragmentInteraction(uri);
+            mListener.onFragmentInteraction(uri);
+        }
     }
-}
 
     @Override
     public void onAttach(Context context) {

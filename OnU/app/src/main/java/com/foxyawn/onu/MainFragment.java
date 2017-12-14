@@ -63,9 +63,7 @@ public class MainFragment extends Fragment {
                 Toast.makeText(mContext, "공간유형 : "+estimation.getPlacetype()+"\n"+"구 : "+estimation.getDistrict()+"\n"+"인원 : "+estimation.getPerson()+"\n"+"날짜 : "+estimation.getDate(), Toast.LENGTH_LONG).show();
                 databaseReference = FirebaseDatabase.getInstance().getReference();
                 user = FirebaseAuth.getInstance().getCurrentUser();
-                Toast.makeText(mContext, user.getUid(), Toast.LENGTH_LONG).show();
                 estimation.setEmail(user.getEmail());
-
                 databaseReference.child("contract").child(user.getUid()).setValue(estimation);
             }
         });

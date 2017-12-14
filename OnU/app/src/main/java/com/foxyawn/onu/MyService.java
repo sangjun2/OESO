@@ -97,7 +97,7 @@ public class MyService extends Service {
                     if (bl == true) {
 
                         Estimation es = dataSnapshot.getValue(Estimation.class);
-                        if (es.getDistrict().equals("동구")) {
+                        if (es.getDistrict().equals("유성구")) {
                             Intent intent = new Intent(MyService.this, MainActivity.class);
                             PendingIntent pendingIntent = PendingIntent.getActivity(MyService.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 

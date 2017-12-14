@@ -12,7 +12,7 @@ public class GridItem {
     String providerUid;
     Info info;
     ImageView sonImageView;
-    
+
     public GridItem(String name, String address, String introduce, String price, int resId, String providerUid,Info info){
         this.name = name;
         this.address=address;
