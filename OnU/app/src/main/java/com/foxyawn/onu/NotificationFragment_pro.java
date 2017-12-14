@@ -1,11 +1,7 @@
 package com.foxyawn.onu;
 
-import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -13,9 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-
 import android.support.annotation.NonNull;
-
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -55,19 +49,15 @@ public class NotificationFragment_pro extends Fragment {
         // Required empty public constructor
     }
 
-
-    // TODO: Rename and change types and number of parameters
     public static NotificationFragment_pro newInstance() {
         NotificationFragment_pro fragment = new NotificationFragment_pro();
         return fragment;
     }
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = getContext();
-
     }
 
     @Override
@@ -141,7 +131,6 @@ public class NotificationFragment_pro extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_notification_pro, container, false);
         img1 = (ImageView) view.findViewById(R.id.imageView1);
         img2 = (ImageView) view.findViewById(R.id.imageView2);

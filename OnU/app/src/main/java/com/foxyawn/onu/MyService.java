@@ -11,7 +11,6 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.RequiresApi;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -23,8 +22,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 
 public class MyService extends Service {
     NotificationManager Notifi_M;
