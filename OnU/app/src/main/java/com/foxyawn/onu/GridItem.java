@@ -1,5 +1,8 @@
 package com.foxyawn.onu;
 
+import android.net.Uri;
+import android.widget.ImageView;
+
 public class GridItem {
     String placeType;
     String district;
@@ -7,7 +10,7 @@ public class GridItem {
     String address;
     int resId;
     String providerUid;
-
+    ImageView sonImageView;
     public GridItem(String placeType, String district, String person, String address, int resId, String providerUid){
         this.placeType = placeType;
         this.district=district;
@@ -65,5 +68,12 @@ public class GridItem {
         return placeType;
     }
 
+    public void setSonImageView(ImageView sonImageView) {
+        this.sonImageView = sonImageView;
+    }
+
+    public ImageView getSonImageView() {
+        return sonImageView;
+    }
 }
 

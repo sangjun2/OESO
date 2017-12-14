@@ -7,19 +7,19 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="2">
+        >
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="380dp"
-            android:layout_height="280dp" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+
         android:orientation="vertical">
         <LinearLayout
             android:layout_marginLeft="10dp"

@@ -42,4 +42,5 @@ public class GridItemView extends LinearLayout {
     public void setPerson(String person){textView3.setText("수용인원 : " + person);}
     public void setaddress(String address){textView4.setText(address);}
     public void setImage(int resId){imageView.setImageResource(resId);}
+    public ImageView getImageView(){return imageView;}
 }
