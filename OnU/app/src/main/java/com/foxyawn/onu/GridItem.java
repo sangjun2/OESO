@@ -1,9 +1,9 @@
 package com.foxyawn.onu;
 
-import android.net.Uri;
 import android.widget.ImageView;
 
 public class GridItem {
+
     String name;
     String address;
     String introduce;
@@ -12,6 +12,7 @@ public class GridItem {
     String providerUid;
     Info info;
     ImageView sonImageView;
+
     public GridItem(String name, String address, String introduce, String price, int resId, String providerUid,Info info){
         this.name = name;
         this.address=address;
@@ -70,9 +71,6 @@ public class GridItem {
         this.address = address;
     }
 
-
-
-
     public int getResId() {
         return resId;
     }
@@ -80,9 +78,6 @@ public class GridItem {
     public String getAddress() {
         return address;
     }
-
-
-
 
     public void setSonImageView(ImageView sonImageView) {
         this.sonImageView = sonImageView;

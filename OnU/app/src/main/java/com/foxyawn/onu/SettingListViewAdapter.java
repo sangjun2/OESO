@@ -74,7 +74,7 @@ public class SettingListViewAdapter extends BaseAdapter {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     Toast.makeText(context,"설정되었습니다.",Toast.LENGTH_LONG).show();
-                                    Intent intent = new Intent(context,MyService.class);
+                                    Intent intent = new Intent(context, MyService.class);
                                     context.startService(intent);
                                 }
                             }).setNegativeButton("취소", new DialogInterface.OnClickListener() {
@@ -89,6 +89,7 @@ public class SettingListViewAdapter extends BaseAdapter {
                             alert.show();
                         }
                     });
+
                 }
                 else if(this.list[position-1].equals("개인정보 변경")) {
                     convertView.setOnClickListener(new View.OnClickListener() {

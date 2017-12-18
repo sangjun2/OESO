@@ -170,13 +170,13 @@ public class NotificationFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 GridItem item = (GridItem) adapter.getItem(position);
                 Toast.makeText(mContext,
-                                "공간유형 : " + item.getInfo().getPurpose() +
+                        "공간유형 : " + item.getInfo().getPurpose() +
                                 "\n이용가능 시간 : " + item.getInfo().getTime() +
                                 "\n내부 시설 : " + item.getInfo().getFacilities() +
                                 "\n주변 시설 : " + item.getInfo().getAround() +
                                 "\n주의 사항 : " + item.getInfo().getNotice() +
                                 "\n기타 : " + item.getInfo().getEtc()
-                                , Toast.LENGTH_SHORT).show();
+                        , Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(mContext, PictureView.class);
                 intent.putExtra("providerUid",item.getProviderUid());
                 startActivity(intent);
@@ -189,9 +189,9 @@ public class NotificationFragment extends Fragment {
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
-        mListener.onFragmentInteraction(uri);
+            mListener.onFragmentInteraction(uri);
+        }
     }
-}
 
     @Override
     public void onAttach(Context context) {

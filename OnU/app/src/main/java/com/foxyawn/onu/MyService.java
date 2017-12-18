@@ -126,7 +126,6 @@ public class MyService extends Service {
                                 Notifi.flags = Notification.FLAG_AUTO_CANCEL;
                                 Notifi_M.notify(777, Notifi);
                             }
-
                         }
 
                         @Override

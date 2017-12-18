@@ -64,7 +64,6 @@ public class MainFragment extends Fragment {
                 databaseReference = FirebaseDatabase.getInstance().getReference();
                 user = FirebaseAuth.getInstance().getCurrentUser();
                 estimation.setEmail(user.getEmail());
-
                 databaseReference.child("contract").child(user.getUid()).setValue(estimation);
             }
         });
