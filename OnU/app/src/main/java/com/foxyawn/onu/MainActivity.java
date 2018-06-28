@@ -51,25 +51,25 @@ public class MainActivity extends AppCompatActivity implements MainFragment_pro.
                         return true;
                 }
             }else if(type.equals("provider")){
-            switch (item.getItemId()) {
-                case R.id.navigation_menu1:
-                    fragmentTransaction.replace(R.id.content, new MainFragment_pro());
-                    fragmentTransaction.commit();
-                    return true;
-                case R.id.navigation_menu2:
-                    fragmentTransaction.replace(R.id.content, new ChattingFragment_pro());
-                    fragmentTransaction.commit();
-                    return true;
-                case R.id.navigation_menu3:
-                    fragmentTransaction.replace(R.id.content, new NotificationFragment_pro());
-                    fragmentTransaction.commit();
-                    return true;
-                case R.id.navigation_menu4:
-                    fragmentTransaction.replace(R.id.content, new SettingFragment());
-                    fragmentTransaction.commit();
-                    return true;
+                switch (item.getItemId()) {
+                    case R.id.navigation_menu1:
+                        fragmentTransaction.replace(R.id.content, new MainFragment_pro());
+                        fragmentTransaction.commit();
+                        return true;
+                    case R.id.navigation_menu2:
+                        fragmentTransaction.replace(R.id.content, new ChattingFragment_pro());
+                        fragmentTransaction.commit();
+                        return true;
+                    case R.id.navigation_menu3:
+                        fragmentTransaction.replace(R.id.content, new NotificationFragment_pro());
+                        fragmentTransaction.commit();
+                        return true;
+                    case R.id.navigation_menu4:
+                        fragmentTransaction.replace(R.id.content, new SettingFragment());
+                        fragmentTransaction.commit();
+                        return true;
+                }
             }
-}
             return false;
         }
 

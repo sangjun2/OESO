@@ -177,9 +177,7 @@ public class NotificationFragment_pro extends Fragment {
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
-            public void onFailure(@NonNull Exception e) {
-
-            }
+            public void onFailure(@NonNull Exception e) { }
         });
         imagefile3.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
@@ -188,9 +186,7 @@ public class NotificationFragment_pro extends Fragment {
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
-            public void onFailure(@NonNull Exception e) {
-
-            }
+            public void onFailure(@NonNull Exception e) { }
         });
         imagefile4.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
@@ -199,9 +195,7 @@ public class NotificationFragment_pro extends Fragment {
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
-            public void onFailure(@NonNull Exception e) {
-
-            }
+            public void onFailure(@NonNull Exception e) { }
         });
         Button button = (Button) view.findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
